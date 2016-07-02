@@ -3,7 +3,7 @@
 This repo contains the license server for JetBrains products, configured to be hosted on [Cloud Foundry](https://github.com/cloudfoundry/).
 
 ### Installation
-For Deployment on CF you simply have to exsecute the following command in the pulled Github Repo.
+For Deployment on CF you simply have to exsecute the following command in the pulled [Github Repo](https://github.com/elgohr/cf-jetbrains-license-server).
 
 ```bash
 cf push -o lgohr/cf-jetbrains-license-server
