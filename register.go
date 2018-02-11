@@ -17,8 +17,8 @@ func main() {
 	bow := surf.NewBrowser()
 
 	login(bow, serverUrl, username, password)
-	customer, url, serverUid := parseRegistrationData(bow, serverName)
-	register(bow, customer, url, serverUid)
+	customer, serverUid := parseRegistrationData(bow, serverName)
+	register(bow, customer, serverUrl, serverUid)
 }
 
 func login(
@@ -42,25 +42,19 @@ func login(
 	if err != nil {
 		panic(err)
 	}
+	if strings.Compare(bow.Title(), "JetBrains Account") != 0 {
+		panic("Could not log in")
+	}
 }
 
 func parseRegistrationData(
 	bow *browser.Browser,
-	serverName string) (string, string, string) {
+	serverName string) (string, string) {
 	var customer string
-	var url string
 	var serverUid string
 
-	bow.Find("input").Each(func(_ int, f *goquery.Selection) {
-		name, _ := f.Attr("name")
-		value, _ := f.Attr("value")
-
-		if strings.Compare(name, "customer") == 0 {
-			customer = value
-		}
-		if strings.Compare(name, "url") == 0 {
-			url = value
-		}
+	bow.Find("input[name=customer]").Each(func(_ int, f *goquery.Selection) {
+		customer, _ = f.Attr("value")
 	})
 	bow.Find("label").Each(func(_ int, l *goquery.Selection) {
 		if strings.Contains(l.Text(), serverName) {
@@ -70,10 +64,10 @@ func parseRegistrationData(
 			})
 		}
 	})
-	if customer == "" || url == "" || serverUid == "" {
+	if customer == "" || serverUid == "" {
 		panic("Could not get registration data")
 	}
-	return customer, url, serverUid
+	return customer, serverUid
 }
 
 func register(
@@ -81,7 +75,7 @@ func register(
 	customer string,
 	url string,
 	serverUid string) {
-
+	fmt.Printf("Registering - url(%s),serverUid(%s),customer(%s)", url, serverUid, customer)
 	err := bow.Open(fmt.Sprintf("https://account.jetbrains.com/server-registration?customer=%s&url=%s&server_uid=%s", customer, url, serverUid))
 	if err != nil {
 		panic(err)
