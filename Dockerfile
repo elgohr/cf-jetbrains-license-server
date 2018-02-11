@@ -1,9 +1,11 @@
-FROM golang:1.9.4 as build
+FROM golang:1.9.4-alpine as build
 
 WORKDIR /go/src/register
 ADD register.go .
 
-RUN go get gopkg.in/headzoo/surf.v1 \
+RUN apk add --no-cache \
+ git \
+ && go get gopkg.in/headzoo/surf.v1 \
  && go get github.com/PuerkitoBio/goquery \
  && go build register.go \
  && chmod +x ./register
