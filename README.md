@@ -6,8 +6,54 @@ This repository contains the license server for JetBrains products, configured t
 For deployment on Cloud Foundry the following command.
 
 ```bash
-cf push jetbrains-license-server -o lgohr/cf-jetbrains-license-server -m 1024M -k 512M
+cf push jetbrains-license-server \ 
+-o lgohr/cf-jetbrains-license-server \
+-m 1024M \
+-k 512M
 ```
 
 Hint: This command assumes, that you are logged in to Cloud Foundry and that the [Docker Support](https://docs.cloudfoundry.org/adminguide/docker.html) is enabled.
 
+### Registration
+
+Sadly Jetbrains License server doesn't provide an official way to configure the License Server with a license.
+Nevertheless this deployment can be configured to do so.
+In this way the environment variables `USER`, `PASSWORD` and `SERVER_NAME` have to be configured.  
+E.g. via Manifest on Deployment, as there is no other way on `cf push` right now.
+```yaml
+applications:
+- name: jetbrains-license-server
+  instances: 1
+  memory: 1024M
+  disk: 512M
+ env:
+    USER: {USERNAME_FOR_JETBRAINS}
+    PASSWORD: {PASSWORD_FOR_JETBRAINS}
+    SERVER_NAME: {SERVER_NAME}
+```
+You could also push the app and configure the environment variables afterwards via `cf set-env`
+In the case that you configured it via `cf set-env`, you have to `cf restage` the application afterwards.
+
+| Variable | What's that? |
+| --- | --- |
+| USER | Email or Username from https://account.jetbrains.com/login |
+| PASSWORD | Password from https://account.jetbrains.com/login |
+| SERVER_NAME | see bellow |
+
+When you do the manual registration flow, after logging in, you'll be redirected to https://account.jetbrains.com/server-registration  
+
+This site looks like:
+
+___JetBrains License Server___
+
+_You already have license server set up. Would you like to re-use that or create new one?_
+
+_[O] SERVER_NAME: SERVER_ID_  
+_[ ] SERVER_NAME: SERVER_ID_  
+_[ ] SERVER_NAME: SERVER_ID_  
+_[ ] New Server Registration_  
+
+_[SUBMIT]_
+
+As you can see, the SERVER_NAME must be a unique string.  
+Don't try to use the SERVER_ID, because this will change every time you register a new Server!
