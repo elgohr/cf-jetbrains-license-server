@@ -1,4 +1,4 @@
-FROM golang:1.9.4-alpine as build
+FROM golang:1.10-alpine as build
 
 WORKDIR /go/src/register
 ADD register.go .
@@ -9,7 +9,6 @@ RUN apk add --no-cache \
  && go get github.com/PuerkitoBio/goquery \
  && go build register.go \
  && chmod +x ./register
-
 
 FROM java:8-jre-alpine as runtime
 
