@@ -3,6 +3,15 @@ set -e
 
 export HOSTNAME=$(echo "$VCAP_APPLICATION" | cut -d'[' -f2 | cut -d']' -f1 | tr -d '"')
 
+if [[ $HOSTNAME = *","* ]] && [[ -z "$SERVER_HOSTNAME" ]]; then
+  echo "Multiple routes bound to the app but no SERVER_HOSTNAME variable is set."
+  exit 1
+fi
+
+if [[ -z "$SERVER_HOSTNAME" ]]; then
+  export SERVER_HOSTNAME=$HOSTNAME
+fi
+
 ${LCSRV_HOME}/bin/license-server.sh configure \
 		--listen 0.0.0.0 \
 		--port 8111 \
