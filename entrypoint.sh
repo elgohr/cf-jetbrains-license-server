@@ -3,12 +3,20 @@ set -e
 
 export HOSTNAME=$(echo "$VCAP_APPLICATION" | cut -d'[' -f2 | cut -d']' -f1 | tr -d '"')
 
-if [[ $HOSTNAME = *","* ]] && [[ -z "$SERVER_HOSTNAME" ]]; then
+contains_comma()
+{
+  case "$1" in
+    *,*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+if [ -z "$SERVER_HOSTNAME" ] && contains_comma $HOSTNAME; then
   echo "Multiple routes bound to the app but no SERVER_HOSTNAME variable is set."
   exit 1
 fi
 
-if [[ -z "$SERVER_HOSTNAME" ]]; then
+if [ -z "$SERVER_HOSTNAME" ]; then
   export SERVER_HOSTNAME=$HOSTNAME
 fi
 
