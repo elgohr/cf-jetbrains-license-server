@@ -1,3 +1,14 @@
+FROM alpine as cmdTest
+ADD entrypoint.sh .
+ADD register.sh .
+ADD register_test.sh .
+ADD register_mock.sh ./register
+ENV LCSRV_HOME /
+ENV SLEEPING 0
+
+RUN chmod +x ./register \
+  && ./register_test.sh
+
 FROM golang:1.10-alpine as build
 
 WORKDIR /go/src/register
@@ -13,6 +24,7 @@ RUN apk add --no-cache \
 FROM java:8-jre-alpine as runtime
 
 ENV LCSRV_HOME /usr/bin/jetbrains/license-server
+ENV SLEEPING 30
 COPY --from=build /go/src/register/register $LCSRV_HOME/
 
 RUN apk add --no-cache \
