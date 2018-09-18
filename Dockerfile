@@ -1,12 +1,13 @@
-FROM alpine as startupTest
+FROM alpine as alpinejq
+RUN apk add --no-cache jq
+
+FROM alpinejq as startupTest
 ADD entrypoint.sh .
 ADD entrypoint_test.sh .
 ADD mock.sh /bin/license-server.sh
 ADD mock.sh /register.sh
 ENV LCSRV_HOME /
 
-RUN apk add --no-cache \
-  jq
 RUN chmod +x /bin/license-server.sh \
   && chmod +x /register.sh \
   && ./entrypoint_test.sh
