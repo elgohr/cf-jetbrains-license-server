@@ -16,7 +16,7 @@ if [ ! -z $(echo "$REGISTRATION_HOSTNAME" | grep ,) ]; then
   fi
 fi
 
-sleep $SLEEPING # wait until the license server is up
+sleep $REGISTER_TIMEOUT # wait until the license server is up
 
 echo "Trying to register https://$REGISTRATION_HOSTNAME with $JETBRAINS_USERNAME as $SERVER_NAME"
 if [ ! -z "$SERVER_USERNAME" ] && [ ! -z "$SERVER_PASSWORD" ]; then

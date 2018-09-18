@@ -1,10 +1,22 @@
-FROM alpine as cmdTest
+FROM alpine as startupTest
 ADD entrypoint.sh .
+ADD entrypoint_test.sh .
+ADD mock.sh /bin/license-server.sh
+ADD mock.sh /register.sh
+ENV LCSRV_HOME /
+
+RUN apk add --no-cache \
+  jq
+RUN chmod +x /bin/license-server.sh \
+  && chmod +x /register.sh \
+  && ./entrypoint_test.sh
+
+FROM alpine as registerTest
 ADD register.sh .
 ADD register_test.sh .
-ADD register_mock.sh ./register
+ADD mock.sh ./register
 ENV LCSRV_HOME /
-ENV SLEEPING 0
+ENV REGISTER_TIMEOUT 0
 
 RUN chmod +x ./register \
   && ./register_test.sh
@@ -24,13 +36,14 @@ RUN apk add --no-cache \
 FROM java:8-jre-alpine as runtime
 
 ENV LCSRV_HOME /usr/bin/jetbrains/license-server
-ENV SLEEPING 30
+# ENV REGISTER_TIMEOUT 30
 COPY --from=build /go/src/register/register $LCSRV_HOME/
 
 RUN apk add --no-cache \
  ca-certificates \
  wget \
  openssl \
+ jq \
  && wget -q https://download.jetbrains.com/lcsrv/license-server-installer.zip \
  && mkdir -p $LCSRV_HOME \
  && unzip license-server-installer.zip -d $LCSRV_HOME \
