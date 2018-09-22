@@ -2,38 +2,53 @@
 
 
 [[projects]]
+  digest = "1:9a88883f474d09f1da61894cd8115c7f33988d6941e4f6236324c777aaff8f2c"
   name = "github.com/PuerkitoBio/goquery"
   packages = ["."]
-  revision = "a86ea073017a6beddef78c8659e7224e8ca634b0"
-  version = "v1.4.0"
+  pruneopts = ""
+  revision = "dc2ec5c7ca4d9aae063b79b9f581dd3ea6afd2b2"
+  version = "v1.4.1"
 
 [[projects]]
+  digest = "1:e3726ad6f38f710e84c8dcd0e830014de6eaeea81f28d91ae898afecc078479a"
   name = "github.com/andybalholm/cascadia"
   packages = ["."]
+  pruneopts = ""
   revision = "901648c87902174f774fac311d7f176f8647bdaa"
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:382f83e80f7c9c9606f4a4d46bfa7f5adb218702ab74e6ca3632e01238dd70af"
   name = "github.com/headzoo/surf"
-  packages = ["agent","browser","errors","jar","util"]
+  packages = [
+    ".",
+    "agent",
+    "browser",
+    "errors",
+    "jar",
+    "util",
+  ]
+  pruneopts = ""
   revision = "60198774ccce43e1d26c80e961497b7d262460b3"
   version = "v1.0.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:6846191f608c0dd6109f37ca46b784f9630191ff13f86ae974135c05a4c92971"
   name = "golang.org/x/net"
-  packages = ["html","html/atom"]
-  revision = "61147c48b25b599e5b561d2e9c4f3e1ef489ca41"
-
-[[projects]]
-  name = "gopkg.in/headzoo/surf.v1"
-  packages = ["."]
-  revision = "60198774ccce43e1d26c80e961497b7d262460b3"
-  version = "v1.0.0"
+  packages = [
+    "html",
+    "html/atom",
+  ]
+  pruneopts = ""
+  revision = "f04abc6bdfa7a0171a8a0c9fd2ada9391044d056"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "494b5cef8aaf1654b5ff32845a12c848b22c5616137633d944a7ead9d57e4626"
+  input-imports = [
+    "github.com/PuerkitoBio/goquery",
+    "github.com/headzoo/surf",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
