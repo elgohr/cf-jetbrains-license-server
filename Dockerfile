@@ -37,7 +37,7 @@ RUN apk add --no-cache \
 FROM java:8-jre-alpine as runtime
 
 ENV LCSRV_HOME /usr/bin/jetbrains/license-server
-# ENV REGISTER_TIMEOUT 30
+ENV REGISTER_TIMEOUT 30
 COPY --from=build /go/src/register/register $LCSRV_HOME/
 
 RUN apk add --no-cache \
