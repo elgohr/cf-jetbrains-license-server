@@ -6,7 +6,7 @@ This repository contains the license server for JetBrains products, configured t
 For deployment on Cloud Foundry the following command.
 
 ```bash
-cf push jetbrains-license-server \ 
+cf push jetbrains-license-server \
 -o lgohr/cf-jetbrains-license-server \
 -m 1024M \
 -k 512M
@@ -29,18 +29,20 @@ applications:
  env:
     JETBRAINS_USERNAME: {USERNAME_FOR_JETBRAINS}
     JETBRAINS_PASSWORD: {PASSWORD_FOR_JETBRAINS}
+    SERVER_HOSTNAME: {MY-SERVER.com}
     SERVER_NAME: {SERVER_NAME}
 ```
 You could also push the app and configure the environment variables afterwards via `cf set-env`
 In the case that you configured it via `cf set-env`, you have to `cf restage` the application afterwards.
 
-| Variable | What's that? |
-| --- | --- |
-| JETBRAINS_USERNAME | Email or Username from https://account.jetbrains.com/login |
-| JETBRAINS_PASSWORD | Password from https://account.jetbrains.com/login |
-| SERVER_USERNAME (optional) | Basic-Auth username of the license server, if any |
-| SERVER_PASSWORD (optional) | Basic-Auth password of the license server, if any |
-| SERVER_NAME | see bellow |
+| Variable                   | What's that?                                               |
+| -------------------------- | ---------------------------------------------------------- |
+| JETBRAINS_USERNAME         | Email or Username from https://account.jetbrains.com/login |
+| JETBRAINS_PASSWORD         | Password from https://account.jetbrains.com/login          |
+| SERVER_HOSTNAME            | Hostname for the registration process (e.g. myserver.com)  |
+| SERVER_USERNAME (optional) | Basic-Auth username of the license server, if any          |
+| SERVER_PASSWORD (optional) | Basic-Auth password of the license server, if any          |
+| SERVER_NAME                | see bellow                                                 |
 
 When you do the manual registration flow, after logging in, you'll be redirected to https://account.jetbrains.com/server-registration  
 

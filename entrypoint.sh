@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-export HOSTNAME=$(echo "$VCAP_APPLICATION" | cut -d'[' -f2 | cut -d']' -f1 | tr -d '"')
+export HOSTNAME=$(echo "$VCAP_APPLICATION" | jq '.application_uris|@csv' | tr -d '"' | tr -d '\\')
 
 ${LCSRV_HOME}/bin/license-server.sh configure \
 		--listen 0.0.0.0 \
