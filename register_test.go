@@ -12,57 +12,48 @@ import (
 )
 
 type TestCall struct {
-	ExpectedUrl    string
 	ExpectedQuery  string
 	ExpectedMethod string
 	Response       string
+	Called         bool
 }
 
 var (
-	responses []TestCall
-	pageCount = 0
+	responses map[string]*TestCall
 )
 
 func TestRegistersTheServer(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if pageCount < len(responses) {
-			testCall := responses[pageCount]
-			if r.URL.Path != testCall.ExpectedUrl {
-				t.Errorf("Expected different url: Expected %s, but got %s", testCall.ExpectedUrl, r.URL.Path)
-			}
-			if r.URL.RawQuery != testCall.ExpectedQuery {
-				t.Errorf("Expected different query: Expected %s, but got %s", testCall.ExpectedQuery, r.URL.RawQuery)
-			}
-			if r.Method != testCall.ExpectedMethod {
-				t.Errorf("Expected different method: Expected %s, but got %s", testCall.ExpectedMethod, r.Method)
-			}
-			w.Write([]byte(testCall.Response))
-			pageCount++
-		} else {
-			w.WriteHeader(-1)
+		testCall := responses[r.URL.Path]
+		if r.URL.RawQuery != testCall.ExpectedQuery {
+			t.Errorf("Expected different query: Expected %s, but got %s", testCall.ExpectedQuery, r.URL.RawQuery)
 		}
+		if r.Method != testCall.ExpectedMethod {
+			t.Errorf("Expected different method: Expected %s, but got %s", testCall.ExpectedMethod, r.Method)
+		}
+		testCall.Called = true
+		w.Write([]byte(testCall.Response))
 	}))
 	defer ts.Close()
 
 	backupHost := registrationHost
 	registrationHost = ts.URL
 
-	responses = []TestCall{
-		{
-			ExpectedUrl:    "/",
+	responses = map[string]*TestCall{
+		"/": {
 			ExpectedMethod: "GET",
-			Response:       fmt.Sprintf(getPage("testdata/welcome.html"), ts.URL),
-		}, {
-			ExpectedUrl:    "/",
+			Response:       fmt.Sprintf(getPage("testdata/welcome.html"), ts.URL+"/auth"),
+		},
+		"/auth": {
 			ExpectedMethod: "GET",
 			Response:       getPage("testdata/authorize.html"),
-		}, {
-			ExpectedUrl:    "/authorize",
+		},
+		"/authorize": {
 			ExpectedMethod: "GET",
 			ExpectedQuery:  "password=PASSWORD&username=USERNAME",
 			Response:       fmt.Sprintf(getPage("testdata/registrationData.html"), "SERVER_NAME"),
-		}, {
-			ExpectedUrl:    "/server-registration",
+		},
+		"/server-registration": {
 			ExpectedMethod: "GET",
 			ExpectedQuery:  fmt.Sprintf("customer=XYZcustomer&url=%s&server_uid=XYZserver", ts.URL),
 		},
@@ -78,6 +69,11 @@ func TestRegistersTheServer(t *testing.T) {
 	main()
 
 	registrationHost = backupHost
+	for path, expectation := range responses {
+		if !expectation.Called {
+			t.Error("Didn't call " + path)
+		}
+	}
 }
 
 func TestUsesJetBrainsHostForRegistration(t *testing.T) {
