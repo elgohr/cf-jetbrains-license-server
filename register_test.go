@@ -12,10 +12,11 @@ import (
 )
 
 type TestCall struct {
-	ExpectedQuery  string
-	ExpectedMethod string
-	Response       string
-	Called         bool
+	ExpectedQuery      string
+	ExpectedFormValues map[string]string
+	ExpectedMethod     string
+	Response           string
+	Called             bool
 }
 
 var (
@@ -25,11 +26,20 @@ var (
 func TestRegistersTheServer(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		testCall := responses[r.URL.Path]
+		r.ParseForm()
+		if len(testCall.ExpectedFormValues) > 0 {
+			for key, expectedValue := range testCall.ExpectedFormValues {
+				realValue := r.FormValue(key)
+				if realValue != expectedValue {
+					t.Errorf("Expected different value: Expected %s, but got %s at %s", expectedValue, realValue, r.URL.Path)
+				}
+			}
+		}
 		if r.URL.RawQuery != testCall.ExpectedQuery {
 			t.Errorf("Expected different query: Expected %s, but got %s", testCall.ExpectedQuery, r.URL.RawQuery)
 		}
 		if r.Method != testCall.ExpectedMethod {
-			t.Errorf("Expected different method: Expected %s, but got %s", testCall.ExpectedMethod, r.Method)
+			t.Errorf("Expected different method: Expected %s, but got %s at %s", testCall.ExpectedMethod, r.Method, r.URL.Path)
 		}
 		testCall.Called = true
 		w.Write([]byte(testCall.Response))
@@ -49,9 +59,12 @@ func TestRegistersTheServer(t *testing.T) {
 			Response:       getPage("testdata/authorize.html"),
 		},
 		"/authorize": {
-			ExpectedMethod: "GET",
-			ExpectedQuery:  "password=PASSWORD&username=USERNAME",
-			Response:       fmt.Sprintf(getPage("testdata/registrationData.html"), "SERVER_NAME"),
+			ExpectedMethod: "POST",
+			ExpectedFormValues: map[string]string{
+				"username": "USERNAME",
+				"password": "PASSWORD",
+			},
+			Response: fmt.Sprintf(getPage("testdata/registrationData.html"), "SERVER_NAME"),
 		},
 		"/server-registration": {
 			ExpectedMethod: "GET",

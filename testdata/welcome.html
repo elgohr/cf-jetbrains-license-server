@@ -1,7 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
-<head></head>
-<body>
-<a class="btn" href="%s">Register</a>
+<html>
+<head>
+    <title>JetBrains License Server</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">    <script src="/resources/jquery.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/resources/css/bootstrap.css?v=593162c9" type="text/css"/>
+    <script src="/resources/scripts/bootstrap.js?v=30b10c64" type="text/javascript"></script>
+    <script src="/resources/scripts/sausa.js?v=934aa349" type="text/javascript"></script>
+    <script src="/resources/bootstrap-datetimepicker.js" type="text/javascript"></script>
+    <script src="/resources/jasny-bootstrap.js" type="text/javascript"></script>
+    <script src="/resources/utils.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/resources/jasny-bootstrap.css" type="text/css"/>
+    <link rel="stylesheet" href="/resources/datetimepicker.css" type="text/css"/>
+    <link rel="stylesheet" href="/resources/font-awesome.css" type="text/css"/>
+    <link rel="shortcut icon" href="/resources/favicon.ico" type="image/x-icon"/>
+</head>
+<body style="padding-top:85px;">
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <ul class="nav navbar-nav navbar-right pull-right">
+            <li>
+                <p style="margin-top:21px;" class="navbar-text"></p>
+            </li>
+        </ul>
+        <div class="navbar-header"><a style="margin: 0 30px 0 -40px; position: relative; width: 127px; height: 57px; display: block; text-indent: -50000px; background: url('/resources/jetbrains-logo.svg') no-repeat" href="/" class="navbar-brand logo"></a></div>
+        <div class="collapse navbar-collapse navbar-menu-collapse">
+            <ul class="nav navbar-nav">
+                <li><span class="lead navbar-text">Floating License Server</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="footer-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9">
+                <p class="lead">Please register this server installation with JetBrains.</p>
+                <p>You'll be asked to log in with an admin account of your organization:</p>
+                <a href="%s" class="btn btn-primary">Register server</a>
+                <br/>
+            </div>
+        </div>
+    </div>
+    <div class="footer-push"></div>
+</div>
+<div class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5"></div>
+            <div class="col-sm-4">
+                <div class="text-center"><a href="https://www.jetbrains.com/help/license_server" target="_blank">Documentation</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="mailto:license-server-support@jetbrains.com">Contact us</a></div>
+            </div>
+            <div class="col-sm-3">
+                <div class="text-right">Build 17768</div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

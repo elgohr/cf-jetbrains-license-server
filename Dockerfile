@@ -19,16 +19,19 @@ ENV LCSRV_HOME /
 RUN chmod +x ./register \
   && ./register_test.sh
 
-FROM golang:1.10-alpine as build
+FROM golang:1.10-alpine as goDep
+
+RUN apk add --no-cache \
+ git \
+ && go get -u github.com/golang/dep/cmd/dep
+
+FROM goDep as build
 
 WORKDIR /go/src/github.com/elgohr/cf-jetbrains-license-server
 ADD register.go register_test.go Gopkg.toml Gopkg.toml ./
 ADD testdata/* ./testdata/
 
-RUN apk add --no-cache \
- git \
- && go get -u github.com/golang/dep/cmd/dep \
- && dep ensure \
+RUN dep ensure \
  && go test -v \
  && go build register.go \
  && chmod +x ./register
