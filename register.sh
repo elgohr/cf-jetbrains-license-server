@@ -15,9 +15,6 @@ if [ ! -z $(echo "$REGISTRATION_HOSTNAME" | grep ,) ]; then
     REGISTRATION_HOSTNAME=$SERVER_HOSTNAME
   fi
 fi
-
-sleep $REGISTER_TIMEOUT # wait until the license server is up
-
 echo "Trying to register https://$REGISTRATION_HOSTNAME with $JETBRAINS_USERNAME as $SERVER_NAME"
 if [ ! -z "$SERVER_USERNAME" ] && [ ! -z "$SERVER_PASSWORD" ]; then
   echo "Using authentication"

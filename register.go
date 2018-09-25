@@ -3,10 +3,18 @@ package main
 import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
-	"github.com/headzoo/surf/browser"
-	"gopkg.in/headzoo/surf.v1"
+	"github.com/headzoo/surf"
+	"log"
 	"os"
 	"strings"
+	"time"
+)
+
+var (
+	browse           = surf.NewBrowser()
+	maxTries         = 60
+	tries            = 0
+	registrationHost = "https://account.jetbrains.com"
 )
 
 func main() {
@@ -14,25 +22,46 @@ func main() {
 	username := os.Args[2]
 	password := os.Args[3]
 	serverName := os.Args[4]
-	bow := surf.NewBrowser()
 
-	login(bow, serverUrl, username, password)
-	customer, serverUid := parseRegistrationData(bow, serverName)
-	register(bow, customer, serverUrl, serverUid)
-}
-
-func login(
-	bow *browser.Browser,
-	serverUrl string,
-	username string,
-	password string) {
-
-	err := bow.Open(serverUrl)
+	err := openServerSite(serverUrl)
 	if err != nil {
 		panic(err)
 	}
-	bow.Click(".btn")
-	login, err := bow.Form("form[action='/authorize']")
+	login(username, password)
+	customer, serverUid := parseRegistrationData(serverName)
+	register(customer, serverUrl, serverUid)
+}
+
+func openServerSite(serverUrl string) error {
+	var retryOrFail = func(
+		serverUrl string,
+		err error,
+	) error {
+		if tries <= maxTries {
+			time.Sleep(2 * time.Second)
+			tries++
+			return openServerSite(serverUrl)
+		} else {
+			return err
+		}
+	}
+
+	err := browse.Open(serverUrl)
+	if err != nil {
+		return retryOrFail(serverUrl, err)
+	}
+	err = browse.Click(".btn")
+	if err != nil {
+		return retryOrFail(serverUrl, err)
+	}
+	return nil
+}
+
+func login(
+	username string,
+	password string,
+) {
+	login, err := browse.Form("form[action='/authorize']")
 	if err != nil {
 		panic(err)
 	}
@@ -42,25 +71,29 @@ func login(
 	if err != nil {
 		panic(err)
 	}
-	if strings.Compare(bow.Title(), "JetBrains Account") != 0 {
+	if strings.Compare(browse.Title(), "JetBrains Account") != 0 {
 		panic("Could not log in")
 	}
 }
 
 func parseRegistrationData(
-	bow *browser.Browser,
-	serverName string) (string, string) {
-	var customer string
-	var serverUid string
+	serverName string,
+) (
+	string,
+	string,
+) {
+	var (
+		customer  string
+		serverUid string
+	)
 
-	bow.Find("input[name=customer]").Each(func(_ int, f *goquery.Selection) {
+	browse.Find("input[name=customer]").Each(func(_ int, f *goquery.Selection) {
 		customer, _ = f.Attr("value")
 	})
-	bow.Find("label").Each(func(_ int, l *goquery.Selection) {
+	browse.Find("label").Each(func(_ int, l *goquery.Selection) {
 		if strings.Contains(l.Text(), serverName) {
 			l.Find("input").Each(func(_ int, f *goquery.Selection) {
-				value, _ := f.Attr("value")
-				serverUid = value
+				serverUid, _ = f.Attr("value")
 			})
 		}
 	})
@@ -71,12 +104,13 @@ func parseRegistrationData(
 }
 
 func register(
-	bow *browser.Browser,
 	customer string,
 	url string,
-	serverUid string) {
-	fmt.Printf("Registering - url(%s),serverUid(%s),customer(%s)", url, serverUid, customer)
-	err := bow.Open(fmt.Sprintf("https://account.jetbrains.com/server-registration?customer=%s&url=%s&server_uid=%s", customer, url, serverUid))
+	serverUid string,
+) {
+	log.Printf("Registering - url(%s),serverUid(%s),customer(%s)", url, serverUid, customer)
+	registrationUrl := fmt.Sprintf("%s/server-registration?customer=%s&url=%s&server_uid=%s", registrationHost, customer, url, serverUid)
+	err := browse.Open(registrationUrl)
 	if err != nil {
 		panic(err)
 	}

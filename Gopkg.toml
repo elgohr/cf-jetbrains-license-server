@@ -28,7 +28,3 @@
 [[constraint]]
   name = "github.com/headzoo/surf"
   version = "1.0.0"
-
-[[constraint]]
-  name = "gopkg.in/headzoo/surf.v1"
-  version = "1.0.0"
