@@ -3,11 +3,11 @@ set -e
 
 export HOSTNAME=$(echo "$VCAP_APPLICATION" | jq '.application_uris|@csv' | tr -d '"' | tr -d '\\')
 
-${LCSRV_HOME}/bin/license-server.sh configure \
+${USER_HOME}/license-server/bin/license-server.sh configure \
 		--listen 0.0.0.0 \
 		--port 8111 \
 		--jetty.virtualHosts.names=$HOSTNAME \
-		--temp-dir ${LCSRV_HOME}/temp
+		--temp-dir ${USER_HOME}/license-server/temp
 
-exec /register.sh run &
-exec ${LCSRV_HOME}/bin/license-server.sh run
+exec ${USER_HOME}/register.sh run &
+exec ${USER_HOME}/license-server/bin/license-server.sh run
