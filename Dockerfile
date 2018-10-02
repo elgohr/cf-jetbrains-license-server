@@ -49,4 +49,4 @@ RUN apk add --no-cache \
 USER jetbrains
 EXPOSE 8111
 WORKDIR $USER_HOME
-ENTRYPOINT ["/bin/sh", "entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/home/jetbrains/entrypoint.sh"]
