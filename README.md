@@ -26,7 +26,9 @@ applications:
   instances: 1
   memory: 1024M
   disk: 512M
- env:
+  docker:
+    image: lgohr/cf-jetbrains-license-server
+  env:
     JETBRAINS_USERNAME: {USERNAME_FOR_JETBRAINS}
     JETBRAINS_PASSWORD: {PASSWORD_FOR_JETBRAINS}
     SERVER_HOSTNAME: {MY-SERVER.com}
