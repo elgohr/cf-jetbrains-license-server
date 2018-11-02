@@ -72,7 +72,7 @@ func login(
 		panic(err)
 	}
 	if strings.Compare(browse.Title(), "JetBrains Account") != 0 {
-		panic("Could not log in:" + browse.Body())
+		panic("Could not log in - Title:" + browse.Title() + " Body:" + browse.Body())
 	}
 }
 
