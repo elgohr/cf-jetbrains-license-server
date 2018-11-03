@@ -25,7 +25,7 @@ applications:
 - name: jetbrains-license-server
   instances: 1
   memory: 1024M
-  disk: 512M
+  disk_quota: 512M
   docker:
     image: lgohr/cf-jetbrains-license-server
   env:
