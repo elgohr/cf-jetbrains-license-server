@@ -27,7 +27,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	login(username, password)
+	login(username, password, serverUrl)
 	customer, serverUid := parseRegistrationData(serverName)
 	register(customer, serverUrl, serverUid)
 }
@@ -60,6 +60,7 @@ func openServerSite(serverUrl string) error {
 func login(
 	username string,
 	password string,
+	serverUrl string,
 ) {
 	login, err := browse.Form("form[action='/authorize']")
 	if err != nil {
@@ -71,9 +72,28 @@ func login(
 	if err != nil {
 		panic(err)
 	}
-	if strings.Compare(browse.Title(), "JetBrains Account") != 0 {
+	if redirectDoesNotWork() {
+		err = browse.Open("https://account.jetbrains.com/server-registration?url=" + serverUrl)
+		if err != nil {
+			panic(err)
+		}
+	}
+	if stillNotOnAccountPage() {
 		panic("Could not log in - Title:" + browse.Title() + " Body:" + browse.Body())
 	}
+
+}
+
+func redirectDoesNotWork() bool {
+	return isOnAccountPage()
+}
+
+func stillNotOnAccountPage() bool {
+	return isOnAccountPage()
+}
+
+func isOnAccountPage() bool {
+	return strings.Compare(browse.Title(), "JetBrains Account") != 0
 }
 
 func parseRegistrationData(
