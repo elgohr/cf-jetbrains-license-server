@@ -17,23 +17,17 @@ ADD mock.sh ${USER_HOME}/register
 RUN chmod +x ${USER_HOME}/register \
   && ${USER_HOME}/register_test.sh
 
-FROM golang:1.11-alpine as goDep
-RUN apk add --no-cache \
- git \
- && go get -u github.com/golang/dep/cmd/dep
-
-FROM goDep as build
-WORKDIR /go/src/github.com/elgohr/cf-jetbrains-license-server
-ADD register.go register_test.go Gopkg.toml Gopkg.toml ./
+FROM golang:1.11 as build
+WORKDIR /cf-jetbrains-license-server
+ADD register.go register_test.go go.mod go.sum ./
 ADD testdata/* ./testdata/
-RUN dep ensure \
- && go test -v \
+RUN go test -v \
  && go build register.go \
- && chmod +x ./register
+ && chmod +x register
 
 FROM java:8-jre-alpine as runtime
 ENV USER_HOME /home/jetbrains
-COPY --from=build /go/src/github.com/elgohr/cf-jetbrains-license-server/register ${USER_HOME}/
+COPY --from=build /cf-jetbrains-license-server/register ${USER_HOME}/
 ADD entrypoint.sh register.sh ${USER_HOME}/
 RUN apk add --no-cache \
  ca-certificates \
