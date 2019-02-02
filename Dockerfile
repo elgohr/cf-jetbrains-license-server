@@ -17,7 +17,7 @@ ADD mock.sh ${USER_HOME}/register
 RUN chmod +x ${USER_HOME}/register \
   && ${USER_HOME}/register_test.sh
 
-FROM golang:1.10-alpine as goDep
+FROM golang:1.11-alpine as goDep
 RUN apk add --no-cache \
  git \
  && go get -u github.com/golang/dep/cmd/dep
