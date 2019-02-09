@@ -7,15 +7,15 @@ ADD entrypoint.sh entrypoint_test.sh ${USER_HOME}/
 ADD mock.sh ${USER_HOME}/license-server/bin/license-server.sh
 ADD mock.sh ${USER_HOME}/register.sh
 RUN chmod +x ${USER_HOME}/license-server/bin/license-server.sh \
-  && chmod +x ${USER_HOME}/register.sh \
-  && ${USER_HOME}/entrypoint_test.sh
+ && chmod +x ${USER_HOME}/register.sh \
+ && ${USER_HOME}/entrypoint_test.sh
 
 FROM alpine as registerTest
 ENV USER_HOME /home/jetbrains
 ADD register.sh register_test.sh ${USER_HOME}/
 ADD mock.sh ${USER_HOME}/register
 RUN chmod +x ${USER_HOME}/register \
-  && ${USER_HOME}/register_test.sh
+ && ${USER_HOME}/register_test.sh
 
 FROM golang:1.11 as build
 WORKDIR /cf-jetbrains-license-server
@@ -31,10 +31,10 @@ ENV USER_HOME /home/jetbrains
 COPY --from=build /cf-jetbrains-license-server/register ${USER_HOME}/
 ADD entrypoint.sh register.sh ${USER_HOME}/
 RUN apk add --no-cache \
- ca-certificates \
- wget \
- openssl \
- jq \
+    ca-certificates \
+    wget \
+    openssl \
+    jq \
  && adduser -S jetbrains \
  && wget -q https://download.jetbrains.com/lcsrv/license-server-installer.zip \
  && mkdir -p ${USER_HOME}/license-server \
@@ -45,3 +45,14 @@ USER jetbrains
 EXPOSE 8111
 WORKDIR $USER_HOME
 ENTRYPOINT ["/bin/sh", "/home/jetbrains/entrypoint.sh"]
+
+FROM runtime as integrationTest
+ENV USER_HOME /home/jetbrains
+ENV VCAP_APPLICATION '{"application_uris":["localhost"]}'
+ENV JETBRAINS_USERNAME integrationTestuser
+ENV JETBRAINS_PASSWORD integration-Testuser
+ENV SERVER_NAME Testserver
+ADD integration_test.sh /
+RUN /integration_test.sh
+
+FROM runtime

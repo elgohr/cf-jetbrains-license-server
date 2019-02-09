@@ -15,10 +15,7 @@ if [ ! -z $(echo "$REGISTRATION_HOSTNAME" | grep ,) ]; then
     REGISTRATION_HOSTNAME=$SERVER_HOSTNAME
   fi
 fi
-echo "Trying to register https://$REGISTRATION_HOSTNAME with $JETBRAINS_USERNAME as $SERVER_NAME"
-if [ ! -z "$SERVER_USERNAME" ] && [ ! -z "$SERVER_PASSWORD" ]; then
-  echo "Using authentication"
-  exec $USER_HOME/register "https://$SERVER_USERNAME:$SERVER_PASSWORD@$REGISTRATION_HOSTNAME/register" "$JETBRAINS_USERNAME" "$JETBRAINS_PASSWORD" "$SERVER_NAME"
-else
-  exec $USER_HOME/register "https://$REGISTRATION_HOSTNAME/register" "$JETBRAINS_USERNAME" "$JETBRAINS_PASSWORD" "$SERVER_NAME"
-fi
+
+echo "Trying to register http://localhost:8111/register with $JETBRAINS_USERNAME as $SERVER_NAME"
+exec $USER_HOME/register "http://localhost:8111/register" "$JETBRAINS_USERNAME" "$JETBRAINS_PASSWORD" "$SERVER_NAME"
+

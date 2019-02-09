@@ -31,7 +31,6 @@ applications:
   env:
     JETBRAINS_USERNAME: {USERNAME_FOR_JETBRAINS}
     JETBRAINS_PASSWORD: {PASSWORD_FOR_JETBRAINS}
-    SERVER_HOSTNAME: {MY-SERVER.com}
     SERVER_NAME: {SERVER_NAME}
 ```
 You could also push the app and configure the environment variables afterwards via `cf set-env`
@@ -41,9 +40,6 @@ In the case that you configured it via `cf set-env`, you have to `cf restage` th
 | -------------------------- | ---------------------------------------------------------- |
 | JETBRAINS_USERNAME         | Email or Username from https://account.jetbrains.com/login |
 | JETBRAINS_PASSWORD         | Password from https://account.jetbrains.com/login          |
-| SERVER_HOSTNAME            | Hostname for the registration process (e.g. myserver.com)  |
-| SERVER_USERNAME (optional) | Basic-Auth username of the license server, if any          |
-| SERVER_PASSWORD (optional) | Basic-Auth password of the license server, if any          |
 | SERVER_NAME                | see bellow                                                 |
 
 When you do the manual registration flow, after logging in, you'll be redirected to https://account.jetbrains.com/server-registration  
