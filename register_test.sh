@@ -4,9 +4,6 @@ function clean() {
   unset JETBRAINS_USERNAME
   unset JETBRAINS_PASSWORD
   unset SERVER_NAME
-  unset SERVER_USERNAME
-  unset SERVER_PASSWORD
-  unset SERVER_HOSTNAME
 }
 
 function itErrorsWhenJETBRAINS_USERNAMEisNotProvided() {
@@ -44,7 +41,6 @@ function itErrorsWhenSERVER_NAMEisNotProvided() {
 
 function itCallsTheRegistrationScript() {
   clean
-  export HOSTNAME="host.name" # set by entrypoint.
   export JETBRAINS_USERNAME="USER"
   export JETBRAINS_PASSWORD="PASSWORD"
   export SERVER_NAME="SERVER_NAME"
