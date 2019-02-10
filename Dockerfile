@@ -21,6 +21,7 @@ FROM golang:1.11 as build
 WORKDIR /cf-jetbrains-license-server
 ADD register.go register_test.go go.mod go.sum ./
 ADD testdata/* ./testdata/
+ENV GOOS=linux GOARCH=amd64 CGO_ENABLED=0
 RUN go test -v \
  && go build register.go \
  && chmod +x register
