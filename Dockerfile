@@ -45,3 +45,13 @@ USER jetbrains
 EXPOSE 8111
 WORKDIR $USER_HOME
 ENTRYPOINT ["/bin/sh", "/home/jetbrains/entrypoint.sh"]
+
+FROM runtime as integrationTest
+ENV VCAP_APPLICATION '{"application_uris":["localhost"]}'
+ENV JETBRAINS_USERNAME integrationTestuser
+ENV JETBRAINS_PASSWORD integration-Testuser
+ENV SERVER_NAME Testserver
+ADD integration_test.sh /
+RUN /integration_test.sh
+
+FROM runtime
