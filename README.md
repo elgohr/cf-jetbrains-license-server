@@ -37,11 +37,19 @@ applications:
 You could also push the app and configure the environment variables afterwards via `cf set-env`
 In the case that you configured it via `cf set-env`, you have to `cf restage` the application afterwards.
 
-| Variable                   | What's that?                                               |
-| -------------------------- | ---------------------------------------------------------- |
-| JETBRAINS_USERNAME         | Email or Username from https://account.jetbrains.com/login |
-| JETBRAINS_PASSWORD         | Password from https://account.jetbrains.com/login          |
-| SERVER_NAME                | see bellow                                                 |
+| Variable                       | What's that?                                               |
+| ------------------------------ | ---------------------------------------------------------- |
+| JETBRAINS_USERNAME             | Email or Username from https://account.jetbrains.com/login |
+| JETBRAINS_PASSWORD             | Password from https://account.jetbrains.com/login          |
+| SERVER_NAME                    | see bellow                                                 |
+| HTTP_PROXYHOST (optional)      | If would like to configure a http proxy server             |
+| HTTP_PROXYPORT (optional)      |                                                            |
+| HTTP_PROXYUSER (optional)      |                                                            |
+| HTTP_PROXYPASSWORD (optional)  |                                                            |
+| HTTPS_PROXYHOST (optional)     | If would like to configure a https proxy server            |
+| HTTPS_PROXYPORT (optional)     |                                                            |
+| HTTPS_PROXYUSER (optional)     |                                                            |
+| HTTPS_PROXYPASSWORD (optional) |                                                            |
 
 When you do the manual registration flow, after logging in, you'll be redirected to https://account.jetbrains.com/server-registration  
 
