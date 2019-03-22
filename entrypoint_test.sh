@@ -50,11 +50,11 @@ Called mock with: run" ]; then
 
 function itCommunicatesViaHttpProxyIfProvided() {
   clean
-  export HTTP_PROXYHOST='http://myCompany.proxy'
+  export HTTP_PROXYHOST='myCompany.proxy'
   export HTTP_PROXYPORT='8080'
   export VCAP_APPLICATION='{"someOtherArray":["somethingElse"],"application_uris":["myfirst.route","mysecond.route"],"uris":["not.this.route","not.this.route2"]}'
   result=$(exec ${USER_HOME}/entrypoint.sh)
-  if [ "$result" != "Called mock with: configure --listen 0.0.0.0 --port 8111 --jetty.virtualHosts.names=myfirst.route,mysecond.route --temp-dir /home/jetbrains/license-server/temp -J-Dhttp.proxyHost http://myCompany.proxy -J-Dhttp.proxyPort 8080
+  if [ "$result" != "Called mock with: configure --listen 0.0.0.0 --port 8111 --jetty.virtualHosts.names=myfirst.route,mysecond.route --temp-dir /home/jetbrains/license-server/temp -J-Dhttp.proxyHost=myCompany.proxy -J-Dhttp.proxyPort=8080
 Called mock with: run
 Called mock with: run" ]; then
     echo "Didn't use the http proxy server: $result"
@@ -66,11 +66,11 @@ function itCommunicatesViaSecuredHttpProxyIfProvided() {
   clean
   export HTTP_PROXYUSER='myUser'
   export HTTP_PROXYPASSWORD='myPassword'
-  export HTTP_PROXYHOST='http://myCompany.proxy'
+  export HTTP_PROXYHOST='myCompany.proxy'
   export HTTP_PROXYPORT='8080'
   export VCAP_APPLICATION='{"someOtherArray":["somethingElse"],"application_uris":["myfirst.route","mysecond.route"],"uris":["not.this.route","not.this.route2"]}'
   result=$(exec ${USER_HOME}/entrypoint.sh)
-  if [ "$result" != "Called mock with: configure --listen 0.0.0.0 --port 8111 --jetty.virtualHosts.names=myfirst.route,mysecond.route --temp-dir /home/jetbrains/license-server/temp -J-Dhttp.proxyHost http://myCompany.proxy -J-Dhttp.proxyPort 8080 -J-Dhttp.proxyUser myUser -J-Dhttp.proxyPassword myPassword
+  if [ "$result" != "Called mock with: configure --listen 0.0.0.0 --port 8111 --jetty.virtualHosts.names=myfirst.route,mysecond.route --temp-dir /home/jetbrains/license-server/temp -J-Dhttp.proxyHost=myCompany.proxy -J-Dhttp.proxyPort=8080 -J-Dhttp.proxyUser=myUser -J-Dhttp.proxyPassword=myPassword
 Called mock with: run
 Called mock with: run" ]; then
     echo "Didn't use the secured http proxy server: $result"
@@ -80,11 +80,11 @@ Called mock with: run" ]; then
 
 function itCommunicatesViaHttpsProxyIfProvided() {
   clean
-  export HTTPS_PROXYHOST='https://myCompanys.proxy'
+  export HTTPS_PROXYHOST='myCompanys.proxy'
   export HTTPS_PROXYPORT='8443'
   export VCAP_APPLICATION='{"someOtherArray":["somethingElse"],"application_uris":["myfirst.route","mysecond.route"],"uris":["not.this.route","not.this.route2"]}'
   result=$(exec ${USER_HOME}/entrypoint.sh)
-  if [ "$result" != "Called mock with: configure --listen 0.0.0.0 --port 8111 --jetty.virtualHosts.names=myfirst.route,mysecond.route --temp-dir /home/jetbrains/license-server/temp -J-Dhttps.proxyHost https://myCompanys.proxy -J-Dhttps.proxyPort 8443
+  if [ "$result" != "Called mock with: configure --listen 0.0.0.0 --port 8111 --jetty.virtualHosts.names=myfirst.route,mysecond.route --temp-dir /home/jetbrains/license-server/temp -J-Dhttps.proxyHost=myCompanys.proxy -J-Dhttps.proxyPort=8443
 Called mock with: run
 Called mock with: run" ]; then
     echo "Didn't use the https proxy server: $result"
@@ -96,11 +96,11 @@ function itCommunicatesViaSecuredHttpsProxyIfProvided() {
   clean
   export HTTPS_PROXYUSER='myUser'
   export HTTPS_PROXYPASSWORD='myPassword'
-  export HTTPS_PROXYHOST='https://myCompanys.proxy'
+  export HTTPS_PROXYHOST='myCompanys.proxy'
   export HTTPS_PROXYPORT='8443'
   export VCAP_APPLICATION='{"someOtherArray":["somethingElse"],"application_uris":["myfirst.route","mysecond.route"],"uris":["not.this.route","not.this.route2"]}'
   result=$(exec ${USER_HOME}/entrypoint.sh)
-  if [ "$result" != "Called mock with: configure --listen 0.0.0.0 --port 8111 --jetty.virtualHosts.names=myfirst.route,mysecond.route --temp-dir /home/jetbrains/license-server/temp -J-Dhttps.proxyHost https://myCompanys.proxy -J-Dhttps.proxyPort 8443 -J-Dhttps.proxyUser myUser -J-Dhttps.proxyPassword myPassword
+  if [ "$result" != "Called mock with: configure --listen 0.0.0.0 --port 8111 --jetty.virtualHosts.names=myfirst.route,mysecond.route --temp-dir /home/jetbrains/license-server/temp -J-Dhttps.proxyHost=myCompanys.proxy -J-Dhttps.proxyPort=8443 -J-Dhttps.proxyUser=myUser -J-Dhttps.proxyPassword=myPassword
 Called mock with: run
 Called mock with: run" ]; then
     echo "Didn't use the secured https proxy server: $result"
