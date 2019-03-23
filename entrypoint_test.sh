@@ -2,10 +2,6 @@
 
 function clean() {
   unset VCAP_APPLICATION
-  unset HTTP_PROXYHOST
-  unset HTTP_PROXYPORT
-  unset HTTP_PROXYUSER
-  unset HTTP_PROXYPASSWORD
   unset HTTPS_PROXYHOST
   unset HTTPS_PROXYPORT
   unset HTTPS_PROXYUSER
@@ -44,36 +40,6 @@ function itUsesApplicationUris() {
 Called mock with: run
 Called mock with: run" ]; then
     echo "Didn't use the application_uris: $result"
-    exit 1
-  fi
-}
-
-function itCommunicatesViaHttpProxyIfProvided() {
-  clean
-  export HTTP_PROXYHOST='myCompany.proxy'
-  export HTTP_PROXYPORT='8080'
-  export VCAP_APPLICATION='{"someOtherArray":["somethingElse"],"application_uris":["myfirst.route","mysecond.route"],"uris":["not.this.route","not.this.route2"]}'
-  result=$(exec ${USER_HOME}/entrypoint.sh)
-  if [ "$result" != "Called mock with: configure --listen 0.0.0.0 --port 8111 --jetty.virtualHosts.names=myfirst.route,mysecond.route --temp-dir /home/jetbrains/license-server/temp -J-Dhttp.proxyHost=myCompany.proxy -J-Dhttp.proxyPort=8080
-Called mock with: run
-Called mock with: run" ]; then
-    echo "Didn't use the http proxy server: $result"
-    exit 1
-  fi
-}
-
-function itCommunicatesViaSecuredHttpProxyIfProvided() {
-  clean
-  export HTTP_PROXYUSER='myUser'
-  export HTTP_PROXYPASSWORD='myPassword'
-  export HTTP_PROXYHOST='myCompany.proxy'
-  export HTTP_PROXYPORT='8080'
-  export VCAP_APPLICATION='{"someOtherArray":["somethingElse"],"application_uris":["myfirst.route","mysecond.route"],"uris":["not.this.route","not.this.route2"]}'
-  result=$(exec ${USER_HOME}/entrypoint.sh)
-  if [ "$result" != "Called mock with: configure --listen 0.0.0.0 --port 8111 --jetty.virtualHosts.names=myfirst.route,mysecond.route --temp-dir /home/jetbrains/license-server/temp -J-Dhttp.proxyHost=myCompany.proxy -J-Dhttp.proxyPort=8080 -J-Dhttp.proxyUser=myUser -J-Dhttp.proxyPassword=myPassword
-Called mock with: run
-Called mock with: run" ]; then
-    echo "Didn't use the secured http proxy server: $result"
     exit 1
   fi
 }
@@ -124,8 +90,6 @@ Called mock with: run" ]; then
 itStartsUpTheServerWithOneRoute
 itStartsUpTheServerWithMultipleRoutes
 itUsesApplicationUris
-itCommunicatesViaHttpProxyIfProvided
 itCommunicatesViaHttpsProxyIfProvided
-itCommunicatesViaSecuredHttpProxyIfProvided
 itCommunicatesViaSecuredHttpsProxyIfProvided
 itAddsCustomOptionsApplicationUris

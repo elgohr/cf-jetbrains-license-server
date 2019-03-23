@@ -20,7 +20,7 @@ Hint: This command assumes, that you are logged in to Cloud Foundry and that the
 Sadly Jetbrains License server doesn't provide an official way to configure the License Server with a license.
 Nevertheless this deployment can be configured to do so.
 In this way the environment variables `USER`, `PASSWORD` and `SERVER_NAME` have to be configured.  
-E.g. via Manifest on Deployment, as there is no other way on `cf push` right now.
+This can be done via Manifest on Deployment, as there is no other way on `cf push` right now.
 ```yaml
 applications:
 - name: jetbrains-license-server
@@ -42,14 +42,10 @@ In the case that you configured it via `cf set-env`, you have to `cf restage` th
 | JETBRAINS_USERNAME             | Email or Username from https://account.jetbrains.com/login |
 | JETBRAINS_PASSWORD             | Password from https://account.jetbrains.com/login          |
 | SERVER_NAME                    | see bellow                                                 |
-| HTTP_PROXYHOST (optional)      | If would like to configure a http proxy server             |
-| HTTP_PROXYPORT (optional)      |                                                            |
-| HTTP_PROXYUSER (optional)      |                                                            |
-| HTTP_PROXYPASSWORD (optional)  |                                                            |
-| HTTPS_PROXYHOST (optional)     | If would like to configure a https proxy server            |
-| HTTPS_PROXYPORT (optional)     |                                                            |
-| HTTPS_PROXYUSER (optional)     |                                                            |
-| HTTPS_PROXYPASSWORD (optional) |                                                            |
+| HTTPS_PROXYHOST (optional)     | The proxy host (e.g. myCompany.proxy) without protocol     |
+| HTTPS_PROXYPORT (optional)     | The proxy port (e.g. 8080)                                 |
+| HTTPS_PROXYUSER (optional)     | If the proxy is secured, this is the user                  |
+| HTTPS_PROXYPASSWORD (optional) | If the proxy is secured, this is the password              |
 
 When you do the manual registration flow, after logging in, you'll be redirected to https://account.jetbrains.com/server-registration  
 
