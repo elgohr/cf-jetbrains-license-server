@@ -26,7 +26,7 @@ RUN go test -v \
  && go build register.go \
  && chmod +x register
 
-FROM java:8-jre-alpine as runtime
+FROM openjdk:13-alpine as runtime
 ENV USER_HOME /home/jetbrains
 COPY --from=build /cf-jetbrains-license-server/register ${USER_HOME}/
 ADD entrypoint.sh register.sh ${USER_HOME}/
