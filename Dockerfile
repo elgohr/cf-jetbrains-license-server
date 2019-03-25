@@ -26,9 +26,18 @@ RUN go test -v \
  && go build register.go \
  && chmod +x register
 
-FROM openjdk:13-alpine as runtime
+FROM openjdk:13-alpine as buildJava
+RUN jlink --compress=2 \
+    --no-man-pages \
+    --module-path /opt/openjdk-13/jmods \
+    --add-modules java.base,java.xml,java.desktop,java.management,java.logging,java.instrument,java.naming,java.scripting \
+    --output /compressed
+
+FROM alpine:3.9.2 as runtime
 ENV USER_HOME /home/jetbrains
 COPY --from=build /cf-jetbrains-license-server/register ${USER_HOME}/
+COPY --from=buildJava /compressed /opt/jdk/
+ENV PATH=$PATH:/opt/jdk/bin
 ADD entrypoint.sh register.sh ${USER_HOME}/
 RUN apk add --no-cache \
  ca-certificates \
