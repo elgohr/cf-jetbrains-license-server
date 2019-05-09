@@ -44,5 +44,7 @@ golang.org/x/net v0.0.0-20190424035100-afe8014c977f h1:AdrEFSB0VljoT3WKx6s/adMPk
 golang.org/x/net v0.0.0-20190424035100-afe8014c977f/go.mod h1:t9HGtf8HONx5eT2rtn7q6eTqICYqUVnKs3thJo3Qplg=
 golang.org/x/net v0.0.0-20190424114239-4829fb13d2c6 h1:Bs3mSDGt/NerMQ4Jc5/w8A93aH++oEUG7G2bZN1u99E=
 golang.org/x/net v0.0.0-20190424114239-4829fb13d2c6/go.mod h1:t9HGtf8HONx5eT2rtn7q6eTqICYqUVnKs3thJo3Qplg=
+golang.org/x/net v0.0.0-20190509223716-a4d6f7feada5 h1:/iWfOEMwv5v8C8fjH6Zten9Dfm0JWXQbGSD4tbe1fIk=
+golang.org/x/net v0.0.0-20190509223716-a4d6f7feada5/go.mod h1:t9HGtf8HONx5eT2rtn7q6eTqICYqUVnKs3thJo3Qplg=
 golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
