@@ -25,7 +25,7 @@ func main() {
 
 	err := openServerSite(serverUrl)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	login(username, password, serverUrl)
 	customer, serverUid := parseRegistrationData(serverName)
@@ -64,22 +64,22 @@ func login(
 ) {
 	login, err := browse.Form("form[action='/authorize']")
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	login.Input("username", username)
 	login.Input("password", password)
 	err = login.Submit()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	if redirectDoesNotWork() {
 		err = browse.Open("https://account.jetbrains.com/server-registration?url=" + serverUrl)
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 	}
 	if stillNotOnAccountPage() {
-		panic("Could not log in - Title:" + browse.Title() + " Body:" + browse.Body())
+		log.Fatal("Could not log in - Title:" + browse.Title() + " Body:" + browse.Body())
 	}
 
 }
@@ -130,6 +130,6 @@ func register(
 	registrationUrl := fmt.Sprintf("%s/server-registration?customer=%s&url=%s&server_uid=%s", registrationHost, customer, url, serverUid)
 	err := browse.Open(registrationUrl)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
