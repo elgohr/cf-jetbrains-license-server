@@ -99,14 +99,9 @@ func isOnAccountPage() bool {
 func parseRegistrationData(
 	serverName string,
 ) (
-	string,
-	string,
+	customer string,
+	serverUid string,
 ) {
-	var (
-		customer  string
-		serverUid string
-	)
-
 	browse.Find("input[name=customer]").Each(func(_ int, f *goquery.Selection) {
 		customer, _ = f.Attr("value")
 	})
@@ -117,10 +112,13 @@ func parseRegistrationData(
 			})
 		}
 	})
-	if customer == "" || serverUid == "" {
-		panic("Could not get registration data")
+	if customer == "" {
+		log.Fatalf("Could not get customer from %v", browse.Body())
 	}
-	return customer, serverUid
+	if serverUid == "" {
+		log.Fatalf("Could not get serverUid from %v", browse.Body())
+	}
+	return
 }
 
 func register(
