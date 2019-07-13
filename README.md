@@ -8,7 +8,7 @@ For deployment on Cloud Foundry the following command.
 
 ```bash
 cf push jetbrains-license-server \
--o lgohr/cf-jetbrains-license-server \
+-o docker.pkg.github.com/elgohr/cf-jetbrains-license-server/cf-jetbrains-license-server \
 -m 1024M \
 -k 512M
 ```
@@ -28,7 +28,7 @@ applications:
   memory: 1024M
   disk_quota: 512M
   docker:
-    image: lgohr/cf-jetbrains-license-server
+    image: docker.pkg.github.com/elgohr/cf-jetbrains-license-server/cf-jetbrains-license-server
   env:
     JETBRAINS_USERNAME: {USERNAME_FOR_JETBRAINS}
     JETBRAINS_PASSWORD: {PASSWORD_FOR_JETBRAINS}
