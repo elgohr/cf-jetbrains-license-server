@@ -1,26 +1,29 @@
-workflow "Build and deploy to Dockerhub" {
-  on = "push"
+workflow "Publish" {
   resolves = [
     "logout",
   ]
+  on = "push"
 }
 
 action "login" {
-  uses = "actions/docker/login@8cdf801b322af5f369e00d85e9cf3a7122f49108"
+  uses = "actions/docker/login@master"
   secrets = [
     "DOCKER_USERNAME",
     "DOCKER_PASSWORD",
   ]
+  env = {
+    DOCKER_REGISTRY_URL = "docker.pkg.github.com"
+  }
 }
 
 action "publish" {
-  uses = "elgohr/Publish-Docker-Github-Action@1.0"
-  args = "lgohr/cf-jetbrains-license-server"
+  uses = "elgohr/Publish-Docker-Github-Action@master"
+  args = "docker.pkg.github.com/elgohr/cf-jetbrains-license-server/cf-jetbrains-license-server"
   needs = ["login"]
 }
 
 action "logout" {
-  uses = "actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108"
+  uses = "actions/docker/cli@master"
   args = "logout"
   needs = ["publish"]
 }
