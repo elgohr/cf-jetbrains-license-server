@@ -44,7 +44,7 @@ RUN apk add --no-cache \
  wget \
  openssl \
  jq \
- && adduser -S jetbrains \
+ && adduser -S -D jetbrains \
  && wget -q https://download.jetbrains.com/lcsrv/license-server-installer.zip \
  && mkdir -p ${USER_HOME}/license-server \
  && unzip -q license-server-installer.zip -d ${USER_HOME}/license-server \
