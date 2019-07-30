@@ -1,9 +1,11 @@
-workflow "Build and deploy to Dockerhub" {
+workflow "Publish Master" {
   on = "push"
-  resolves = [
-    "logout-master",
-    "logout-tags",
-  ]
+  resolves = ["logout-master"]
+}
+
+workflow "Publish Tags" {
+  on = "push"
+  resolves = ["logout-tags"]
 }
 
 action "test" {
