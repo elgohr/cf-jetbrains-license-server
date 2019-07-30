@@ -1,7 +1,8 @@
 workflow "Build and deploy to Dockerhub" {
   on = "push"
   resolves = [
-    "logout",
+    "logout-master",
+    "logout-tags",
   ]
 }
 
@@ -11,25 +12,50 @@ action "test" {
 }
 
 action "master" {
-  needs = "test"
+  needs = ["test"]
   uses = "actions/bin/filter@master"
   args = "branch master"
 }
 
-action "login" {
-  needs = "master"
+action "tags" {
+  needs = ["test"]
+  uses = "actions/bin/filter@master"
+  args = "tag"
+}
+
+action "login-master" {
+  needs = ["master"]
   uses = "actions/docker/login@master"
   secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD"]
 }
 
-action "publish" {
+action "publish-master" {
   uses = "elgohr/Publish-Docker-Github-Action@master"
   args = "lgohr/cf-jetbrains-license-server"
-  needs = ["login"]
+  needs = ["login-master"]
 }
 
-action "logout" {
+action "logout-master" {
   uses = "actions/docker/cli@master"
   args = "logout"
-  needs = ["publish"]
+  needs = ["publish-master"]
 }
+
+action "login-tags" {
+  needs = ["tags"]
+  uses = "actions/docker/login@master"
+  secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD"]
+}
+
+action "publish-tags" {
+  uses = "elgohr/Publish-Docker-Github-Action@master"
+  args = "lgohr/cf-jetbrains-license-server"
+  needs = ["login-tags"]
+}
+
+action "logout-tags" {
+  uses = "actions/docker/cli@master"
+  args = "logout"
+  needs = ["publish-tags"]
+}
+
