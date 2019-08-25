@@ -1,5 +1,5 @@
 name: Publish Master
-on: 
+on:
   push:
     branches:
     - master
@@ -8,14 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Build the Docker image
-      run: docker build . -t lgohr/cf-jetbrains-license-server:${{ github.sha }} -t lgohr/cf-jetbrains-license-server:latest
-    - name: Login to Registry
-      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-    - name: Push to Registry
-      run: |
-        docker push lgohr/cf-jetbrains-license-server:${{ github.sha }}
-        docker push lgohr/cf-jetbrains-license-server:latest
-    - name: Logout
-      run: docker logout
-      
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: lgohr/cf-jetbrains-license-server
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        snapshot: true
