@@ -1,5 +1,6 @@
 # JetBrains License Server for Cloud Foundry  
-[![Actions Status](https://wdp9fww0r9.execute-api.us-west-2.amazonaws.com/production/badge/elgohr/cf-jetbrains-license-server)](https://wdp9fww0r9.execute-api.us-west-2.amazonaws.com/production/results/elgohr/cf-jetbrains-license-server)
+[![Actions Status](https://github.com/elgohr/cf-jetbrains-license-server/workflows/Test/badge.svg)](https://github.com/elgohr/cf-jetbrains-license-server/actions)
+[![Actions Status](https://github.com/elgohr/cf-jetbrains-license-server/workflows/Publish%20Master/badge.svg)](https://github.com/elgohr/cf-jetbrains-license-server/actions)
 
 This repository contains the license server for JetBrains products, configured to be hosted on [Cloud Foundry](https://github.com/cloudfoundry/).
 
