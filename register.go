@@ -62,7 +62,7 @@ func login(
 	password string,
 	serverUrl string,
 ) {
-	login, err := browse.Form("form[action='/authorize']")
+	login, err := browse.Form(".js-auth-dialog-form")
 	if err != nil {
 		log.Fatal(err)
 	}

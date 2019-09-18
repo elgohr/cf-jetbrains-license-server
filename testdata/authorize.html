@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,24 +9,26 @@
     <link rel="stylesheet" href="https://resources.jetbrains.com/storage/ui/fonts/fonts.css" type="text/css"/>
     <link rel="stylesheet" href="/appresources/jquery.dataTables.css?v=c2ef715" type="text/css"/>
     <link rel="stylesheet" href="/appresources/markside.css?v=a15765bc" type="text/css"/>
-    <link rel="stylesheet" href="/appresources/bootstrap.less?v=a08b5b07" type="text/css"/>
+    <link rel="stylesheet" href="/appresources/bootstrap-full.less?v=75bddc5b" type="text/css"/>
     <link rel="stylesheet" href="/appresources/datetimepicker.css?v=5df2ea75" type="text/css"/>
     <link rel="stylesheet" href="/appresources/jasny-bootstrap.css?v=f55b5bde" type="text/css"/>
     <link rel="stylesheet" href="/appresources/font-awesome.css?v=de015a3" type="text/css"/>
     <link rel="stylesheet" href="/appresources/tipsy.css?v=980f2268" type="text/css"/>
     <link rel="stylesheet" href="/appresources/chosen.css?v=82ebffd4" type="text/css"/>
-    <link rel="stylesheet" href="/appresources/credit-card.less?v=4d3717ab" type="text/css"/>
+    <link rel="stylesheet" href="/appresources/credit-card.less?v=9fede289" type="text/css"/>
     <link rel="stylesheet" href="/appresources/jquery.growl.css?v=26245b98" type="text/css"/>
     <link rel="stylesheet" href="/appresources/bootstrap-multiselect.css?v=49de55a1" type="text/css"/>
-    <link rel="stylesheet" href="/dynamic/default.css?v=7f326014" type="text/css"/>
+    <link rel="stylesheet" href="/dynamic/default.css?v=a4af43ce" type="text/css"/>
+    <script src="https://www.gstatic.com/charts/loader.js" type="text/javascript"></script>
     <script src="https://www.google.com/jsapi" type="text/javascript"></script>
-    <link rel="canonical" href="https://account.jetbrains.com/login" /><meta class="local" name="description" content="JetBrains, creator of the best Java IDE - IntelliJ IDEA - is a technology-leading software vendor specializing in the creation of intelligent development tools.">    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon"/>
-</head>
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon"/>
+    <script src="https://static.zdassets.com/ekr/snippet.js?key=06c7e4c3-a30c-4343-bdc7-7c95ac2a6110" id="ze-snippet" type="text/javascript"></script>
+    <link rel="canonical" href="https://account.jetbrains.com/login" /><meta class="local" name="description" content="JetBrains, creator of the best Java IDE - IntelliJ IDEA - is a technology-leading software vendor specializing in the creation of intelligent development tools.">  </head>
 <body onunload=";" class="jba-agreement">
 <div class="jba-agreement-panel">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">By using the JetBrains Account website, you agree to the JetBrains Account Agreement.<span class="unit-container-sm"></span><a href="/profile/privacyPolicy?backUrl=https%3A%2F%2Faccount.jetbrains.com%2Flogin">Review now</a><span class="unit-container-sm"></span><a data-method="POST" href="#" class="ajax-action" data-url="/profile/postponePrivacyPolicy?_st=e8f5v938oj">Remind me later</a></div>
+            <div class="col-sm-12">By using the JetBrains Account website, you agree to the JetBrains Account Agreement.<span class="unit-container-sm"></span><a href="/profile/privacyPolicy?backUrl=https%3A%2F%2Faccount.jetbrains.com%2Flogin">Review now</a><span class="unit-container-sm"></span><a data-method="POST" href="#" class="ajax-action" data-url="/profile/postponePrivacyPolicy?_st=IyXkXxKLnkZX6uS3uFQ_7VaRhpLmRSOJtQng5pCLFfEm4xjJR3hvpEb8pu6slFb2">Remind me later</a></div>
         </div>
     </div>
 </div>
@@ -35,7 +38,7 @@
         <div class="collapse navbar-collapse navbar-menu-collapse">
             <ul class="nav navbar-nav"></ul>
             <ul class="nav navbar-nav navbar-actions">
-                <li><a href="https://sales.jetbrains.com/hc/categories/200934669-JetBrains-Account-Help"><span class="j-icon-help"></span>Help</a></li>
+                <li><a href="https://sales.jetbrains.com/hc/categories/200934669-JetBrains-Account-Help"><span class="j-icon-help-medium"></span>Help</a></li>
             </ul>
         </div>
     </div>
@@ -49,31 +52,64 @@
             <div class="col-sm-12">
                 <div class="container start-screen">
                     <div class="row">
-                        <div class="col-sm-5">
-                            <h1>Welcome to JetBrains Account</h1>
-                            <p class="lead">Register your License Server</p>
-                            <p>To register the license server please sign in with your JetBrains Account or create a new one.</p>
-                            <p>Once registered, you can allocate licenses to be managed by your License Server.</p>
-                        </div>
-                        <div class="col-sm-4 col-sm-offset-1">
-                            <div class="well panel-highlighted">
-                                <form method="post" action="/authorize">
-                                    <h5>Sign in with existing account</h5>
-                                    <div class="form-group"><input name="username" style="width:100%" id="username" placeholder="Email address or Username" type="text" autofocus class="form-control"/></div>
-                                    <div class="form-group"><input name="password" style="width:100%" placeholder="Password" type="password" class="form-control"/></div>
-                                    <div class="form-group clearfix">
-                                        <div class="pull-left"><button class="btn btn-primary btn-lg login-submit-btn">Sign In</button><span class="unit-container-xs"></span></div>
-                                        <div><a style="padding-left: 0;" href="/forgot-password" class="btn btn-lg btn-link">Forgot password?</a></div>
+                        <div class="col-sm-12 col-md-11 col-lg-10">
+                            <div class="row">
+                                <div class="col-sm-6 col-lg-5">
+                                    <h1>Welcome to JetBrains Account</h1>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <i class="j-icon-purchases-feature pull-left"></i>
+                                            <p class="lead">
+                                                <strong>Access your purchases</strong>
+                                                <br/>
+                                                and view your order history
+                                            </p>
+                                        </div>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="well panel-highlighted">
-                                <form method="post" action="/signup-request?_st=e8f5v938oj">
-                                    <h5>Not registered yet?</h5>
-                                    <h3>Create JetBrains Account</h3>
-                                    <div class="form-group"><input pattern="^[a-zA-Z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$" name="email" style="width:100%" id="email" placeholder="Your email address" type="text" class="form-control" oninput="try {if ($(this).val().match(new RegExp(this.getAttribute('pattern')))) { this.setCustomValidity(''); } else { this.setCustomValidity('Please enter a valid email address'); }} catch(e) {}"/></div>
-                                    <div class="form-group clearfix"><button class="btn btn-primary btn-lg eml-submit-btn">Sign Up</button></div>
-                                </form>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <i class="j-icon-alert-feature pull-left"></i>
+                                            <p class="lead">
+                                                <strong>Identify expired and outdated licenses,</strong>
+                                                <br/>
+                                                order new licenses and upgrades
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <i class="j-icon-manage-feature pull-left"></i>
+                                            <p class="lead">
+                                                <strong>Manage your company licenses</strong>
+                                                <br/>
+                                                and distribute them to end users
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-sm-offset-1">
+                                    <div class="well panel-highlighted">
+                                        <form method="post" action="/authorize?_st=IyXkXxKLnkZX6uS3uFQ_7VaRhpLmRSOJtQng5pCLFfEm4xjJR3hvpEb8pu6slFb2" class="js-auth-dialog-form">
+                                            <p class="js-auth-dialog-div-errors text-danger"></p>
+                                            <h5>Sign in with existing account</h5>
+                                            <div class="form-group js-auth-dialog-input-username"><input name="username" style="width:100%" id="username" placeholder="Email address or Username" type="text" autofocus class="form-control"/></div>
+                                            <div class="form-group js-auth-dialog-input-password"><input name="password" style="width:100%" placeholder="Password" type="password" class="form-control"/></div>
+                                            <div style="display:none;" class="form-group js-auth-dialog-input-2fa"><input name="secondFactor" style="width:100%" placeholder="One-time password" type="text" class="form-control"/></div>
+                                            <div class="form-group clearfix">
+                                                <div class="pull-left"><button onclick="return false;" class="btn btn-primary btn-lg js-auth-dialog-btn-signin login-submit-btn">Sign In</button><span class="unit-container-xs"></span></div>
+                                                <div class="js-auth-dialog-div-reset-pswd"><a style="padding-left: 0;" href="/forgot-password" class="btn btn-lg btn-link">Forgot password?</a></div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="well panel-highlighted">
+                                        <form method="post" action="/signup-request?_st=IyXkXxKLnkZX6uS3uFQ_7VaRhpLmRSOJtQng5pCLFfEm4xjJR3hvpEb8pu6slFb2">
+                                            <h5>Not registered yet?</h5>
+                                            <h3>Create JetBrains Account</h3>
+                                            <div class="form-group"><input pattern="^[a-zA-Z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$" name="email" style="width:100%" id="email" placeholder="Your email address" type="text" class="form-control" oninput="try { if($(this).val().trim().match(new RegExp(this.getAttribute('pattern')))) { this.setCustomValidity(''); } else { this.setCustomValidity('Please enter a valid email address'); } } catch(e) {}"/></div>
+                                            <div class="form-group clearfix"><button onclick="$('#email').val((_, x) =&gt; x.trim())" class="btn btn-primary btn-lg eml-submit-btn">Sign Up</button></div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -85,11 +121,11 @@
 </div>
 <div class="footer">
     <div class="container">
-        <div class="small">Copyright&nbsp;&copy;&nbsp;2000&ndash;2018 JetBrains s.r.o.&nbsp;|&nbsp;<a href="https://sales.jetbrains.com/hc/categories/200934669-JetBrains-Account-Help" target="_blank">Help</a>&nbsp;|&nbsp;<a href="mailto:sales@jetbrains.com?subject=JetBrains Account Support">Support</a>&nbsp;|&nbsp;<a href="https://www.jetbrains.com/company/privacy.html" target="_blank">JetBrains Privacy Policy</a>&nbsp;|&nbsp;<a href="//www.jetbrains.com/legal/agreements/jetbrains_account.html">JetBrains Account Agreement</a>&nbsp;|&nbsp;Build&nbsp;#1376</div>
+        <div class="small">Copyright&nbsp;&copy;&nbsp;2000&ndash;2019 JetBrains s.r.o.&nbsp;|&nbsp;<a href="https://sales.jetbrains.com/hc/categories/200934669-JetBrains-Account-Help" target="_blank">Help</a>&nbsp;|&nbsp;<a href="mailto:sales@jetbrains.com?subject=JetBrains Account Support">Support</a>&nbsp;|&nbsp;<a href="https://www.jetbrains.com/company/privacy.html" target="_blank">JetBrains Privacy Policy</a>&nbsp;|&nbsp;<a href="//www.jetbrains.com/legal/agreements/jetbrains_account.html">JetBrains Account Agreement</a>&nbsp;|&nbsp;Build&nbsp;#2019.09-1802</div>
     </div>
 </div>
-<script src="/appresources/requirejs-config.js?v=6b78eb1b" type="text/javascript"></script>
-<script src="/appresources/require.js?v=92fabbd4" type="text/javascript"></script>
+<script src="/appresources/requirejs-config.js?v=94a6f094" type="text/javascript"></script>
+<script src="/appresources/require.js?v=cc5cbeb6" type="text/javascript"></script>
 <script type="text/javascript">
     requirejs.onError = function(error) {
         require(['jetprofile'], function (JetProfile) {

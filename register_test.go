@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
 	"net/http/httptest"
@@ -30,17 +32,11 @@ func TestRegistersTheServer(t *testing.T) {
 		if len(testCall.ExpectedFormValues) > 0 {
 			for key, expectedValue := range testCall.ExpectedFormValues {
 				realValue := r.FormValue(key)
-				if realValue != expectedValue {
-					t.Errorf("Expected different value: Expected %s, but got %s at %s", expectedValue, realValue, r.URL.Path)
-				}
+				assert.Equal(t, expectedValue, realValue, r.URL.Path)
 			}
 		}
-		if r.URL.RawQuery != testCall.ExpectedQuery {
-			t.Errorf("Expected different query: Expected %s, but got %s", testCall.ExpectedQuery, r.URL.RawQuery)
-		}
-		if r.Method != testCall.ExpectedMethod {
-			t.Errorf("Expected different method: Expected %s, but got %s at %s", testCall.ExpectedMethod, r.Method, r.URL.Path)
-		}
+		assert.Equal(t, testCall.ExpectedQuery, r.URL.RawQuery)
+		assert.Equal(t, testCall.ExpectedMethod, r.Method)
 		testCall.Called = true
 		w.Write([]byte(testCall.Response))
 	}))
@@ -64,7 +60,8 @@ func TestRegistersTheServer(t *testing.T) {
 				"username": "USERNAME",
 				"password": "PASSWORD",
 			},
-			Response: fmt.Sprintf(getPage("testdata/registrationData.html"), "SERVER_NAME"),
+			ExpectedQuery: "_st=IyXkXxKLnkZX6uS3uFQ_7VaRhpLmRSOJtQng5pCLFfEm4xjJR3hvpEb8pu6slFb2",
+			Response:      fmt.Sprintf(getPage("testdata/registrationData.html"), "SERVER_NAME"),
 		},
 		"/server-registration": {
 			ExpectedMethod: "GET",
@@ -83,51 +80,17 @@ func TestRegistersTheServer(t *testing.T) {
 
 	registrationHost = backupHost
 	for path, expectation := range responses {
-		if !expectation.Called {
-			t.Error("Didn't call " + path)
-		}
+		assert.True(t, expectation.Called, "Didn't call "+path)
 	}
 }
 
 func TestUsesJetBrainsHostForRegistration(t *testing.T) {
-	if registrationHost != "https://account.jetbrains.com" {
-		t.Error("Expected registration to happen against https://account.jetbrains.com")
-	}
-}
-
-func TestRetriesRegistration(t *testing.T) {
-	var response string
-
-	address := "127.0.0.1:8000"
-
-	ts := &httptest.Server{
-		Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte(response))
-		})},
-	}
-
-	url := "http://" + address
-
-	response = fmt.Sprintf(getPage("testdata/welcome.html"), url)
-
-	go func() {
-		time.Sleep(2 * time.Second)
-		l, err := net.Listen("tcp", address)
-		if err != nil {
-			panic("httptest: failed to listen")
-		}
-		ts.Listener = l
-		ts.Start()
-	}()
-
-	openServerSite(url)
-	ts.Close()
+	assert.Equal(t, "https://account.jetbrains.com", registrationHost)
 }
 
 func TestStopsTryingAfterANumberOfTries(t *testing.T) {
-	if maxTries != 60 {
-		t.Error("Number of tries not as expected")
-	}
+	assert.Equal(t, maxTries, 60)
+
 	reduceTriesForTest()
 	defer func() { maxTries = 60 }()
 
@@ -141,6 +104,36 @@ func TestStopsTryingAfterANumberOfTries(t *testing.T) {
 
 func reduceTriesForTest() {
 	maxTries = 2
+}
+
+func TestRetriesRegistration(t *testing.T) {
+	var response string
+
+	ts := &httptest.Server{
+		Config: &http.Server{Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte(response))
+		})},
+	}
+	defer ts.Close()
+
+	address := "127.0.0.1:8085"
+	url := "http://" + address
+	response = fmt.Sprintf(getPage("testdata/welcome.html"), url)
+
+	go func() {
+		time.Sleep(2 * time.Second)
+		l, err := net.Listen("tcp", address)
+		if err != nil {
+			log.Fatal("httptest: failed to listen")
+		}
+		ts.Listener = l
+		ts.Start()
+	}()
+
+	assert.Eventually(t, func() bool {
+		return openServerSite(url) == nil
+	}, 10*time.Second, 1*time.Second)
+
 }
 
 func getPage(name string) string {
