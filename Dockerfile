@@ -33,7 +33,7 @@ RUN jlink --compress=2 \
     --add-modules java.base,java.xml,java.desktop,java.management,java.logging,java.instrument,java.naming,java.scripting \
     --output /compressed
 
-FROM alpine:3.10.1 as runtime
+FROM alpine:3.11.3 as runtime
 ENV USER_HOME /home/jetbrains
 COPY --from=build /cf-jetbrains-license-server/register ${USER_HOME}/
 COPY --from=buildJava /compressed /opt/jdk/
