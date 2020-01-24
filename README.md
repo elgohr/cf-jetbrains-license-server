@@ -65,3 +65,4 @@ _[SUBMIT]_
 
 As you can see, the SERVER_NAME must be a unique string.  
 Don't try to use the SERVER_ID, because this will change every time you register a new Server!
+
