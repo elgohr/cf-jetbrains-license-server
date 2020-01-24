@@ -3,6 +3,10 @@ set -e
 
 export HOSTNAME=$(echo "$VCAP_APPLICATION" | jq '.application_uris|@csv' | tr -d '"' | tr -d '\\')
 
+if [ ! -z "$CUSTOM_HOSTNAMES" ]; then
+	export HOSTNAME="$HOSTNAME,$CUSTOM_HOSTNAMES"
+fi
+
 export PROXY=""
 if [ ! -z "$HTTPS_PROXYHOST" ] && [ ! -z "$HTTPS_PROXYPORT" ]; then
     PROXY="-J-Dhttps.proxyHost=$HTTPS_PROXYHOST -J-Dhttps.proxyPort=$HTTPS_PROXYPORT"

@@ -6,6 +6,8 @@ function clean() {
   unset HTTPS_PROXYPORT
   unset HTTPS_PROXYUSER
   unset HTTPS_PROXYPASSWORD
+  unset CUSTOM_OPTIONS
+  unset CUSTOM_HOSTNAMES
 }
 
 function itStartsUpTheServerWithOneRoute() {
@@ -87,9 +89,23 @@ Called mock with: run" ]; then
   fi
 }
 
+function itAddsCustomOptionsApplicationUrisWithCustomHostname() {
+  clean
+  export CUSTOM_HOSTNAMES='custom.host,second.custom'
+  export VCAP_APPLICATION='{"someOtherArray":["somethingElse"],"application_uris":["myfirst.route","mysecond.route"],"uris":["not.this.route","not.this.route2"]}'
+  result=$(exec ${USER_HOME}/entrypoint.sh)
+  if [ "$result" != "Called mock with: configure --listen 0.0.0.0 --port 8111 --jetty.virtualHosts.names=myfirst.route,mysecond.route,custom.host,second.custom --temp-dir /home/jetbrains/license-server/temp
+Called mock with: run
+Called mock with: run" ]; then
+    echo "Didn't add custom hostnames: $result"
+    exit 1
+  fi
+}
+
 itStartsUpTheServerWithOneRoute
 itStartsUpTheServerWithMultipleRoutes
 itUsesApplicationUris
 itCommunicatesViaHttpsProxyIfProvided
 itCommunicatesViaSecuredHttpsProxyIfProvided
 itAddsCustomOptionsApplicationUris
+itAddsCustomOptionsApplicationUrisWithCustomHostname
