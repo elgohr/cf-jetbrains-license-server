@@ -17,7 +17,7 @@ ADD mock.sh ${USER_HOME}/register
 RUN chmod +x ${USER_HOME}/register \
   && ${USER_HOME}/register_test.sh
 
-FROM golang:1.15 as build
+FROM golang:1.16 as build
 WORKDIR /cf-jetbrains-license-server
 ADD register.go register_test.go go.mod go.sum ./
 ADD testdata/* ./testdata/
