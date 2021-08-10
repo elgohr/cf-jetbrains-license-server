@@ -48,6 +48,8 @@ In the case that you configured it via `cf set-env`, you have to `cf restage` th
 | HTTPS_PROXYUSER (optional)     | If the proxy is secured, this is the user                  |
 | HTTPS_PROXYPASSWORD (optional) | If the proxy is secured, this is the password              |
 
+> Hint: Please make sure that floating server is enabled for your account (check with sales@jetbrains.com).
+
 When you do the manual registration flow, after logging in, you'll be redirected to https://account.jetbrains.com/server-registration  
 
 This site looks like:
