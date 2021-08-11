@@ -4,6 +4,10 @@ updates:
   directory: "/"
   schedule:
     interval: "daily"
+  allow:
+      - dependency-name: "alpine:*"
+      - dependency-name: "golang:*"
+      - dependency-name: "openjdk:8*"
 - package-ecosystem: "gomod"
   directory: "/"
   schedule:

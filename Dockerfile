@@ -1,4 +1,4 @@
-FROM alpine as alpinejq
+FROM alpine:3.14.1 as alpinejq
 RUN apk add --no-cache jq
 
 FROM alpinejq as startupTest
@@ -10,7 +10,7 @@ RUN chmod +x ${USER_HOME}/license-server/bin/license-server.sh \
   && chmod +x ${USER_HOME}/register.sh \
   && ${USER_HOME}/entrypoint_test.sh
 
-FROM alpine as registerTest
+FROM alpine:3.14.1 as registerTest
 ENV USER_HOME /home/jetbrains
 ADD register.sh register_test.sh ${USER_HOME}/
 ADD mock.sh ${USER_HOME}/register
@@ -26,7 +26,7 @@ RUN go test -v \
  && go build register.go \
  && chmod +x register
 
-FROM openjdk:16-alpine as runtime
+FROM openjdk:8-alpine3.9 as runtime
 ENV USER_HOME /home/jetbrains
 COPY --from=build /cf-jetbrains-license-server/register ${USER_HOME}/
 ENV PATH=$PATH:/opt/jdk/bin
