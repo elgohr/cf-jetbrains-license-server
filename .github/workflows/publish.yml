@@ -10,6 +10,7 @@ jobs:
     - uses: actions/checkout@master
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
+      if: github.actor != 'dependabot[bot]'
       with:
         name: lgohr/cf-jetbrains-license-server
         username: ${{ secrets.DOCKER_USERNAME }}
