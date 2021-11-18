@@ -31,8 +31,8 @@ ENV USER_HOME /home/jetbrains
 COPY --from=build /cf-jetbrains-license-server/register ${USER_HOME}/
 ENV PATH=$PATH:/opt/jdk/bin
 ADD entrypoint.sh register.sh ${USER_HOME}/
-RUN apk update && apk upgrade
-RUN apk add --no-cache \
+RUN apk update && apk upgrade && \
+apk add --no-cache \
  ca-certificates \
  wget \
  openssl \
