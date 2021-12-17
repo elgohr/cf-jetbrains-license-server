@@ -1,7 +1,11 @@
 FROM alpine:3.15.0 as alpinejq
+ARG JETBRAINS_USERNAME
+ARG JETBRAINS_PASSWORD
 RUN apk add --no-cache jq
 
 FROM alpinejq as startupTest
+ARG JETBRAINS_USERNAME
+ARG JETBRAINS_PASSWORD
 ENV USER_HOME /home/jetbrains
 ADD entrypoint.sh entrypoint_test.sh ${USER_HOME}/
 ADD mock.sh ${USER_HOME}/license-server/bin/license-server.sh
@@ -11,6 +15,8 @@ RUN chmod +x ${USER_HOME}/license-server/bin/license-server.sh \
   && ${USER_HOME}/entrypoint_test.sh
 
 FROM alpine:3.15.0 as registerTest
+ARG JETBRAINS_USERNAME
+ARG JETBRAINS_PASSWORD
 ENV USER_HOME /home/jetbrains
 ADD register.sh register_test.sh ${USER_HOME}/
 ADD mock.sh ${USER_HOME}/register
@@ -18,6 +24,8 @@ RUN chmod +x ${USER_HOME}/register \
   && ${USER_HOME}/register_test.sh
 
 FROM golang:1.17.5 as build
+ARG JETBRAINS_USERNAME
+ARG JETBRAINS_PASSWORD
 WORKDIR /cf-jetbrains-license-server
 ADD register.go register_test.go go.mod go.sum ./
 ADD testdata/* ./testdata/
@@ -27,6 +35,8 @@ RUN go test -v \
  && chmod +x register
 
 FROM openjdk:18-alpine3.15 as runtime
+ARG JETBRAINS_USERNAME
+ARG JETBRAINS_PASSWORD
 ENV USER_HOME /home/jetbrains
 COPY --from=build /cf-jetbrains-license-server/register ${USER_HOME}/
 ENV PATH=$PATH:/opt/jdk/bin
@@ -49,6 +59,8 @@ WORKDIR $USER_HOME
 ENTRYPOINT ["/bin/sh", "/home/jetbrains/entrypoint.sh"]
 
 FROM runtime as integrationTest
+ARG JETBRAINS_USERNAME
+ARG JETBRAINS_PASSWORD
 ENV VCAP_APPLICATION '{"application_uris":["localhost"]}'
 ENV SERVER_NAME 'License Server'
 ADD integration_test.sh /
