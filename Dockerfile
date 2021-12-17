@@ -26,7 +26,7 @@ RUN go test -v \
  && go build register.go \
  && chmod +x register
 
-FROM openjdk:8-alpine3.9 as runtime
+FROM openjdk:18-alpine3.15 as runtime
 ENV USER_HOME /home/jetbrains
 COPY --from=build /cf-jetbrains-license-server/register ${USER_HOME}/
 ENV PATH=$PATH:/opt/jdk/bin
