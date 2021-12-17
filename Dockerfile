@@ -1,4 +1,4 @@
-FROM alpine:3.14.1 as alpinejq
+FROM alpine:3.15.0 as alpinejq
 RUN apk add --no-cache jq
 
 FROM alpinejq as startupTest
@@ -10,7 +10,7 @@ RUN chmod +x ${USER_HOME}/license-server/bin/license-server.sh \
   && chmod +x ${USER_HOME}/register.sh \
   && ${USER_HOME}/entrypoint_test.sh
 
-FROM alpine:3.14.1 as registerTest
+FROM alpine:3.15.0 as registerTest
 ENV USER_HOME /home/jetbrains
 ADD register.sh register_test.sh ${USER_HOME}/
 ADD mock.sh ${USER_HOME}/register
