@@ -10,11 +10,9 @@ do
     if [ "${status_code}" == "200" ] ; then
         echo "Server is registered. Everything ok!"
         exit 0
+    else
+        echo "Server returned an error ${status_code}"
     fi
-
-    echo "Health endpoint is returning error"
-    wget -qO- --content-on-error http://localhost:8111/health || true
-    echo " " # for new line
 
     tries=`expr $tries + 1`
     sleep 1s
