@@ -1,11 +1,13 @@
-name: Test
-on:
-  push:
-    branches:
-      - main
+name: Dependabot PR Test
+on: pull_request_target
+
+permissions:
+  contents: read
+
 jobs:
-  build:
+  enableAutoMerge:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
