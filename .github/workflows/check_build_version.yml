@@ -1,7 +1,10 @@
 name: Check Jetbrains Build Version
 on:
+  push:
+    paths:
+      - '.github/workflows/check_build_version.yml'
   schedule:
-    - cron:  '0 */12 * * *'
+    - cron: '0 */12 * * *'
 jobs:
   auto-assign:
     runs-on: ubuntu-latest
