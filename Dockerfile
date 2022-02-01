@@ -34,7 +34,7 @@ RUN go test -v \
  && go build register.go \
  && chmod +x register
 
-FROM openjdk:18-alpine3.15 as runtime
+FROM openjdk:19-alpine3.15 as runtime
 ARG JETBRAINS_USERNAME
 ARG JETBRAINS_PASSWORD
 ENV USER_HOME /home/jetbrains
