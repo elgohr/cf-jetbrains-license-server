@@ -23,7 +23,7 @@ ADD mock.sh ${USER_HOME}/register
 RUN chmod +x ${USER_HOME}/register \
   && ${USER_HOME}/register_test.sh
 
-FROM golang:1.20.3 as build
+FROM golang:1.20.4 as build
 ARG JETBRAINS_USERNAME
 ARG JETBRAINS_PASSWORD
 WORKDIR /cf-jetbrains-license-server
