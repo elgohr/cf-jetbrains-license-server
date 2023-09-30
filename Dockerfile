@@ -1,4 +1,4 @@
-FROM alpine:3.18.0 as alpinejq
+FROM alpine:3.18.4 as alpinejq
 ARG JETBRAINS_USERNAME
 ARG JETBRAINS_PASSWORD
 RUN apk add --no-cache jq
@@ -14,7 +14,7 @@ RUN chmod +x ${USER_HOME}/license-server/bin/license-server.sh \
   && chmod +x ${USER_HOME}/register.sh \
   && ${USER_HOME}/entrypoint_test.sh
 
-FROM alpine:3.18.0 as registerTest
+FROM alpine:3.18.4 as registerTest
 ARG JETBRAINS_USERNAME
 ARG JETBRAINS_PASSWORD
 ENV USER_HOME /home/jetbrains
@@ -23,7 +23,7 @@ ADD mock.sh ${USER_HOME}/register
 RUN chmod +x ${USER_HOME}/register \
   && ${USER_HOME}/register_test.sh
 
-FROM golang:1.20.4 as build
+FROM golang:1.21.1 as build
 ARG JETBRAINS_USERNAME
 ARG JETBRAINS_PASSWORD
 WORKDIR /cf-jetbrains-license-server
