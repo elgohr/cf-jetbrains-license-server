@@ -19,7 +19,7 @@ jobs:
         working-directory: updater
         run: go run main.go
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         if: steps.check.outputs.changed == 'true'
         with:
           commit_message: "Updating license server to ${{ steps.check.outputs.version }}"
