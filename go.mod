@@ -1,6 +1,6 @@
 module github.com/elgohr/cf-jetbrains-license-server
 
-go 1.17
+go 1.21
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
