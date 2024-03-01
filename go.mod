@@ -3,7 +3,7 @@ module github.com/elgohr/cf-jetbrains-license-server
 go 1.21
 
 require (
-	github.com/PuerkitoBio/goquery v1.9.0
+	github.com/PuerkitoBio/goquery v1.9.1
 	github.com/headzoo/surf v1.0.1
 	github.com/stretchr/testify v1.8.4
 )
