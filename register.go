@@ -1,20 +1,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
-	"github.com/headzoo/surf"
+	"github.com/chromedp/chromedp"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
-)
-
-var (
-	browse           = surf.NewBrowser()
-	maxTries         = 60
-	tries            = 0
-	registrationHost = "https://account.jetbrains.com"
 )
 
 func main() {
@@ -23,113 +17,103 @@ func main() {
 	password := os.Args[3]
 	serverName := os.Args[4]
 
-	err := openServerSite(serverUrl)
-	if err != nil {
-		log.Fatal(err)
-	}
-	login(username, password, serverUrl)
-	customer, serverUid := parseRegistrationData(serverName)
-	register(customer, serverUrl, serverUid)
+	ctx := getChromeDPContext()
+
+	// create a timeout
+	ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
+	defer cancel()
+
+	login(ctx, serverUrl, username, password, serverName)
+
+	selectCorrectServerAndConfirm(ctx, serverName)
+
+	waitForServerPageToRender(ctx)
+
+	log.Printf("Successfully registered to %s", serverName)
 }
 
-func openServerSite(serverUrl string) error {
-	var retryOrFail = func(
-		serverUrl string,
-		err error,
-	) error {
-		if tries <= maxTries {
-			time.Sleep(2 * time.Second)
-			tries++
-			return openServerSite(serverUrl)
-		} else {
-			return err
-		}
-	}
-
-	err := browse.Open(serverUrl)
-	if err != nil {
-		return retryOrFail(serverUrl, err)
-	}
-	err = browse.Click(".btn")
-	if err != nil {
-		return retryOrFail(serverUrl, err)
-	}
-	return nil
-}
-
-func login(
-	username string,
-	password string,
-	serverUrl string,
-) {
-	login, err := browse.Form(".js-auth-dialog-form")
-	if err != nil {
-		log.Fatal(err)
-	}
-	login.Input("username", username)
-	login.Input("password", password)
-	err = login.Submit()
-	if err != nil {
-		log.Fatal(err)
-	}
-	if redirectDoesNotWork() {
-		err = browse.Open("https://account.jetbrains.com/server-registration?url=" + serverUrl)
+func getChromeDPContext() context.Context {
+	headless := true
+	if len(os.Args) > 5 {
+		headlessArg, err := strconv.ParseBool(os.Args[5])
 		if err != nil {
 			log.Fatal(err)
 		}
+		headless = headlessArg
+		println("Running in headless: ", headless)
 	}
-	if stillNotOnAccountPage() {
-		log.Fatal("Could not log in - Title:" + browse.Title() + " Body:" + browse.Body())
-	}
+	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+		func(a *chromedp.ExecAllocator) {
+			chromedp.Flag("headless", headless)(a)
+		},
+	)
 
+	allocCtx, _ := chromedp.NewExecAllocator(context.Background(), opts...)
+
+	ctx, _ := chromedp.NewContext(allocCtx)
+	return ctx
 }
 
-func redirectDoesNotWork() bool {
-	return isOnAccountPage()
-}
+func login(ctx context.Context, serverUrl string, username string, password string, serverName string) {
+	err := chromedp.Run(ctx,
+		chromedp.Navigate(serverUrl),
+		chromedp.Click(`.btn`, chromedp.NodeVisible, chromedp.ByQuery),
+		chromedp.Click(`button:nth-child(6)`, chromedp.NodeVisible, chromedp.ByQueryAll),
+		chromedp.SendKeys(`#email`, username, chromedp.NodeVisible),
+		chromedp.Click(`button:nth-child(2)`, chromedp.NodeVisible, chromedp.ByQueryAll),
+		chromedp.SendKeys(`#password`, password, chromedp.NodeVisible),
+		chromedp.Click(`button:nth-child(2)`, chromedp.NodeVisible, chromedp.ByQueryAll),
+		chromedp.WaitVisible(`.btn`, chromedp.ByQuery),
+		chromedp.Evaluate(
+			fmt.Sprintf(`
+				document.querySelectorAll('label:has(>input[type="radio"])').forEach(function (label) {
+					if(label.innerText.includes("%s")) {label.click()};
+				})`,
+				serverName),
+			nil),
+	)
 
-func stillNotOnAccountPage() bool {
-	return isOnAccountPage()
-}
-
-func isOnAccountPage() bool {
-	return strings.Compare(browse.Title(), "JetBrains Account") != 0
-}
-
-func parseRegistrationData(
-	serverName string,
-) (
-	customer string,
-	serverUid string,
-) {
-	browse.Find("input[name=customer]").Each(func(_ int, f *goquery.Selection) {
-		customer, _ = f.Attr("value")
-	})
-	browse.Find("label").Each(func(_ int, l *goquery.Selection) {
-		if strings.Contains(l.Text(), serverName) {
-			l.Find("input").Each(func(_ int, f *goquery.Selection) {
-				serverUid, _ = f.Attr("value")
-			})
-		}
-	})
-	if customer == "" {
-		log.Fatalf("Could not get customer from %v", browse.Body())
-	}
-	if serverUid == "" {
-		log.Fatalf("Could not get serverUid from %v", browse.Body())
-	}
-	return
-}
-
-func register(
-	customer string,
-	url string,
-	serverUid string,
-) {
-	log.Printf("Registering - url(%s),serverUid(%s),customer(%s)", url, serverUid, customer)
-	registrationUrl := fmt.Sprintf("%s/server-registration?customer=%s&url=%s&server_uid=%s", registrationHost, customer, url, serverUid)
-	err := browse.Open(registrationUrl)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error logging in and selecting server: %s", err)
+	}
+}
+
+func selectCorrectServerAndConfirm(ctx context.Context, serverName string) {
+	var value string
+	err := chromedp.Run(ctx,
+		chromedp.TextContent(`label:has(>input[type="radio"]:checked)`, &value, chromedp.NodeVisible, chromedp.ByQuery),
+	)
+
+	if err != nil {
+		log.Fatalf("Error validating correct server is selected: %s", err)
+	}
+
+	if !strings.Contains(value, serverName) {
+		log.Fatalf("Server was not selected correctly was: %s, should be: %s", value, serverName)
+	}
+
+	err = chromedp.Run(ctx,
+		chromedp.Click(`.btn`, chromedp.NodeVisible, chromedp.ByQuery),
+	)
+
+	if err != nil {
+		log.Fatalf("Error clicking confirm button: %s", err)
+	}
+}
+
+func waitForServerPageToRender(ctx context.Context) {
+	var res string
+
+	for {
+		err := chromedp.Run(ctx,
+			chromedp.TextContent(`h1`, &res, chromedp.NodeVisible, chromedp.ByQuery),
+		)
+		if err != nil {
+			log.Fatalf("Error while waiting for Server page to show: %s", err)
+		}
+		if res == "Added Licenses" {
+			break
+		}
+		time.Sleep(1 * time.Second) // wait before retrying
 	}
 }
