@@ -1,4 +1,14 @@
 # JetBrains License Server for Cloud Foundry  
+
+> [!CAUTION]
+DEPRECATED  
+Jetbrains decided to change the login mechanism recently.  
+In this way JavaScript was added to the login-flow.  
+There's still no mechanism to add the license configurationwise.  
+This server doesn't support this flow.  
+I'm not using the server anymore and focus on other things.  
+In this way I deprecate the repository.  
+
 [![Publish](https://github.com/elgohr/cf-jetbrains-license-server/actions/workflows/publish.yml/badge.svg)](https://github.com/elgohr/cf-jetbrains-license-server/actions/workflows/publish.yml)
 
 This repository contains the license server for JetBrains products, configured to be hosted on [Cloud Foundry](https://github.com/cloudfoundry/).
